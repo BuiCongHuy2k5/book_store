@@ -1,0 +1,7 @@
+{
+  "recommendations": [
+    "rvest.vs-code-prettier-eslint",
+    "mikestead.dotenv",
+    "dbaeumer.vscode-eslint",
+  ]
+}
