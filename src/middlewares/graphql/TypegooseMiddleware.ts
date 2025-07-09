@@ -1,24 +1,28 @@
-import { Model, Document } from 'mongoose';
-import { getClassForDocument } from '@typegoose/typegoose';
+import { DocumentType } from '@typegoose/typegoose';
 import { MiddlewareFn } from 'type-graphql';
 
 export const TypegooseMiddleware: MiddlewareFn = async (_, next) => {
   const result = await next();
 
   if (Array.isArray(result)) {
-    return result.map(item => (item instanceof Model ? convertDocument(item) : item)).filter(item => !!item);
+    return result.map(item => (isTypegooseDocument(item) ? convertDocument(item) : item)).filter(item => !!item);
   }
 
-  if (result instanceof Model) {
+  if (isTypegooseDocument(result)) {
     return convertDocument(result);
   }
 
   return result;
 };
 
-export function convertDocument(doc: Document) {
-  const convertedDocument = doc.toObject();
-  const DocumentClass = getClassForDocument(doc)!;
-  Object.setPrototypeOf(convertedDocument, DocumentClass.prototype);
-  return convertedDocument;
+// Kiểm tra có phải là DocumentType không
+function isTypegooseDocument(doc: any): doc is DocumentType<any> {
+  return doc && typeof doc.toObject === 'function' && doc.constructor?.name !== 'Object';
+}
+
+// Giữ nguyên prototype khi chuyển document về plain object
+export function convertDocument<T>(doc: DocumentType<T>): T {
+  const converted = doc.toObject(); // plain object
+  Object.setPrototypeOf(converted, Object.getPrototypeOf(doc)); // gán lại prototype class
+  return converted as T;
 }

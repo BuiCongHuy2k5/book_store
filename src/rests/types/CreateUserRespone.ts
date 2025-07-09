@@ -1,3 +1,4 @@
+import { RestRoles } from '@Enums/RestRoles';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
@@ -21,7 +22,7 @@ export class CreateUserResponse {
   birtDate: Date;
 
   @Expose()
-  genDer: string;
+  genDer: RestRoles;
 
   constructor(partial: Partial<CreateUserResponse>) {
     Object.assign(this, partial);

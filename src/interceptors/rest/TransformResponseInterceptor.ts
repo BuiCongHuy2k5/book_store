@@ -10,6 +10,10 @@ import { log } from 'console';
 export class TransformResponseInterceptor implements InterceptorInterface {
   intercept(action: Action, result: any) {
     console.log("log result",result);
+    if (!result) {
+      throw new Error(`${action} not found!`)
+    }
+      
     if (Array.isArray(result.items)) {
       return result.items.map(item => (item instanceof Model ? convertDocument(item) : item)).filter(item => !!item);
     }
@@ -17,7 +21,7 @@ export class TransformResponseInterceptor implements InterceptorInterface {
     if (result instanceof Model) {
       return convertDocument(result);
     }
-
+      
     return result;
   }
 }

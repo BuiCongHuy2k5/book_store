@@ -96,15 +96,19 @@ export default class HttpProvider extends ServiceProvider {
   }
 
   async close() {
-    this.logger.info('Closing http server.');
-    return new Promise((resolve, reject) => {
-      this.httpServer.close(() => {
-        this.logger.info('Http server closed.');
-        mongoose.connection.close(false, () => {
-          this.logger.info('MongoDb connection closed.');
-          resolve(null);
-        });
-      });
+  this.logger.info('Closing http server.');
+  return new Promise<void>((resolve, reject) => {
+    this.httpServer.close(async () => {
+      this.logger.info('Http server closed.');
+      try {
+        await mongoose.connection.close(false);
+        this.logger.info('MongoDb connection closed.');
+        resolve();
+      } catch (err) {
+        this.logger.error('Error closing MongoDb connection.', err);
+        reject(err);
+      }
     });
-  }
+  });
+}
 }

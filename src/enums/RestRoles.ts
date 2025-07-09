@@ -2,4 +2,8 @@ export enum RestRoles {
   ADMIN = 'ADMIN',
   SYSTEM = 'SYSTEM',
   GAME_SERVER = 'GAME_SERVER',
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
+  ACTIVE = 'ACTIVE',
+  INACTIVE = 'INACTIVE',
 }

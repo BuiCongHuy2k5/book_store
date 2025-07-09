@@ -1,4 +1,4 @@
-import { Body, Delete, Get, JsonController, Params, Post, Put, QueryParam, Req, UseBefore } from 'routing-controllers';
+import { Body, Delete, Get, JsonController, Params, Patch, Post, Put, QueryParam, Req, UseBefore } from 'routing-controllers';
 import { OpenAPI } from 'routing-controllers-openapi';
 import winston from 'winston';
 import { Service } from 'typedi';
@@ -76,17 +76,13 @@ async search(
     return plainToInstance(CreateUserResponse, user, { excludeExtraneousValues: true });
   }
 
-  @Put('/:id')
-  async update(
-    @Params() params: { id: number },
-    @Body() body: UpdateUserRequest
-  ): Promise<UpdateUserRespone> {
-    const input: UpdateUserInput = { id: params.id, ...body };
-    const updatedUser = await this.userService.update(input);
-    return plainToInstance(UpdateUserRespone, updatedUser, {
-      excludeExtraneousValues: true
-    });
-  }
+  @Patch('/:id')
+async partialUpdate(
+  @Params() params: { id: number },@Body({ validate: true }) req: UpdateUserRequest) {
+    const input: UpdateUserInput = {
+    id: params.id,...req};
+  return this.userService.partialUpdate(input);
+}
 
   @Delete('/:id')
   async delete(@Params() params: { id: number }) {

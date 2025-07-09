@@ -1,8 +1,7 @@
 import { Service } from 'typedi';
 
-import { User } from '@Entities/User';
-
 import { UserRepository } from '@Repositories/UserRepository';
+import { User } from 'databases/postgres/entities/User';
 
 @Service()
 export class DemoService {

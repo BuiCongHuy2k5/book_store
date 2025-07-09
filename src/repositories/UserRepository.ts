@@ -4,18 +4,12 @@ import winston from 'winston';
 
 import { Logger } from '@Decorators/Logger';
 
-import { User } from '@Entities/User';
 
 import { BaseOrmRepository } from '@Repositories/BaseOrmRepository';
 import { UpdateUserInput } from '@Services/types/UpdateUserInput';
+import { User } from 'databases/postgres/entities/User';
 
-export function removeAccents(str: string): string {
-  return str
-    .normalize('NFD')                   // Tách chữ và dấu
-    .replace(/[\u0300-\u036f]/g, '')    // Xoá dấu
-    .replace(/đ/g, 'd').replace(/Đ/g, 'D') // Thay đ -> d
-    .toLowerCase();                     // Về chữ thường
-}
+
 
 @Service()
 export class UserRepository extends BaseOrmRepository<User> {
@@ -24,6 +18,7 @@ export class UserRepository extends BaseOrmRepository<User> {
     @Inject('dataSource') private dataSource: DataSource,
   ) {
     super(dataSource, User);
+    
   }
 
   async create(user: DeepPartial<User>) {
@@ -39,29 +34,40 @@ export class UserRepository extends BaseOrmRepository<User> {
   email?: string;
   birtDate?: Date;
 }): Promise<User[]> {
-  const users = await this.repo.find(); // lấy toàn bộ users (có thể giới hạn nếu quá nhiều)
+  const query = this.repo.createQueryBuilder('user');
+  const params: any = {};
+  const conditions: string[] = [];
 
-  const normalized = {
-    name: filters.name ? removeAccents(filters.name).toLowerCase() : undefined,
-    email: filters.email ? removeAccents(filters.email).toLowerCase() : undefined,
-    birtDate: filters.birtDate
-    };
+  // Lọc theo name
+  if (filters.name) {
+    conditions.push(`unaccent(lower(user.name)) LIKE unaccent(lower(:name))`);
+    params.name = `%${filters.name}%`;
+  }
 
-  return users.filter(user => {
-    const conditions = [
-      !normalized.name || removeAccents(user.name ?? '').toLowerCase().includes(normalized.name),
-      !normalized.email || removeAccents(user.email ?? '').toLowerCase().includes(normalized.email),
-      !normalized.birtDate || new Date(user.birtDate).toDateString() === normalized.birtDate.toDateString()
-    ];
+  // Lọc theo email
+  if (filters.email) {
+    conditions.push(`unaccent(lower(user.email)) LIKE unaccent(lower(:email))`);
+    params.email = `%${filters.email}%`;
+  }
 
-    return conditions.every(Boolean);
-  });
+  // Lọc theo ngày sinh
+  if (filters.birtDate) {
+    conditions.push(`DATE(user.birtDate) = :birtDate`);
+    params.birtDate = filters.birtDate.toISOString().slice(0, 10);
+  }
+
+  // Gộp các điều kiện
+  if (conditions.length > 0) {
+    query.where(conditions.join(' AND '), params);
+  }
+
+  return query.getMany();
 }
 
-  async update(input: UpdateUserInput) {
-    await this.repo.update(input.id, input);
-    return this.getById(input.id); 
-  }
+  async partialUpdate(id: number, data: DeepPartial<User>): Promise<User> {
+  await this.repo.update(id, data);
+  return this.getById(id);
+}
 
   async delete(id: number){
     return this.repo.delete(id);
@@ -77,7 +83,7 @@ export class UserRepository extends BaseOrmRepository<User> {
       .getOne();
     return !!existingUser;
   }
-
+  
   async isEmailOrPhoneExistForOtherUser(id: number, email: string, phoneNumber: string): Promise<boolean> {
     const existingUser = await this.repo
       .createQueryBuilder('user')

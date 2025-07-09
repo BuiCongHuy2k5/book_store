@@ -1,3 +1,4 @@
+import { RestRoles } from '@Enums/RestRoles';
 import { Field, Int, ObjectType } from 'type-graphql';
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -30,7 +31,11 @@ export class User {
   userName: string;
   
 
-  @Column({ nullable: true })
+  @Column({
+    type: 'enum',
+    enum: RestRoles,
+    default: RestRoles.MALE,
+  })
   @Field({ nullable: true })
   genDer: string;
 

@@ -29,7 +29,7 @@
       "@Errors/*": ["errors/*"],
       "@Models/*": ["databases/mongodb/models/*"],
       "@ModelConstant/*": ["databases/mongodb/constants/*"],
-      "@Entities/*": ["databases/postgres/entities/*"],
+      "@Entities/*": ["entities/*"],
       "@Repositories/*": ["repositories/*"],
       "@Consumers/*": ["consumers/*"],
       "@Services/*": ["services/*"],

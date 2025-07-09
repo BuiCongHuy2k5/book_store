@@ -1,5 +1,8 @@
 export class UnauthorizedError extends Error {
-  constructor() {
-    super('UNAUTHORIZED_ERROR');
+  public readonly statusCode = 401;
+
+  constructor(message: string = 'Unauthorized') {
+    super(message);
+    this.name = 'UnauthorizedError';
   }
 }

@@ -6,9 +6,9 @@ import DataLoader from 'dataloader';
 import { Logger } from '@Decorators/Logger';
 import { DLoader } from '@Decorators/DLoader';
 
-import { User } from '@Entities/User';
 
 import { DemoService } from '@Services/DemoService';
+import { User } from 'databases/postgres/entities/User';
 
 @Service()
 @Resolver()

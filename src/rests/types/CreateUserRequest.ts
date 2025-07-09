@@ -1,15 +1,19 @@
-import { IsDateString, IsEmail, IsOptional, IsPhoneNumber, IsString, Matches } from "class-validator";
+import { RestRoles } from "@Enums/RestRoles";
+import { IsDateString, IsEmail, IsEnum, IsOptional, IsPhoneNumber, IsString, Matches } from "class-validator";
 
 export class CreateUserRequest {
   @IsString()
   name: string;
 
   @IsEmail()
+  @Matches(/^[\w-\.]+@gmail\.com$/, {
+    message: 'EMAIL MUST BE A VALID EMAIL ADDRESS @gmail.com',
+  })
   email: string;
 
   @IsString()
   @Matches(/^(0|\+84)\d{9}$/, {
-    message: 'Số điện thoại không hợp lệ. VD: 0351234567 hoặc +84351234567',
+    message: 'INVALID PHONE NUMBER, MINIMUM 10 DIGITS AND NO LETTERS',
   })
   phoneNumber: string;
 
@@ -19,9 +23,9 @@ export class CreateUserRequest {
   @IsString()
   userName: string;
 
-  @IsString()
-  genDer: string;
+  @IsEnum(RestRoles, { message: 'GENDER MUST BE MALE OR FEMALE' })
+  genDer: RestRoles;
 
-  @IsDateString()
+  @IsDateString({}, { message: 'BIRTH DATE MUST BE A VALID ISO DATE STRING YYY-MMM-DDD' })
   birtDate: Date;
 }
