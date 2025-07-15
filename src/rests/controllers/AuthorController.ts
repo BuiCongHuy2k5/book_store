@@ -23,7 +23,7 @@ import { UpdateAuthorInput } from '@Services/types/UpdateAuthorInput';
 @Service()
 @JsonController('/authors')
 @OpenAPI({ security: [{ BearerToken: [] }] })
-export class TacGiaController {
+export class AuthorController {
   constructor(
     @Logger(module) private readonly logger: winston.Logger,
     private authorService: AuthorService,

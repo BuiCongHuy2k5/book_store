@@ -15,6 +15,9 @@ export class UpdateBookDetailResponse {
   publisherId: number;
 
   @Expose()
+  authorId: number;
+
+  @Expose()
   language: string;
 
   @Expose()

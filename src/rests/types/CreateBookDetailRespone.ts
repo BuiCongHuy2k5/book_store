@@ -1,4 +1,4 @@
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude, Expose, Transform } from 'class-transformer';
 
 @Exclude()
 export class CreateBookDetailResponse {
@@ -9,10 +9,16 @@ export class CreateBookDetailResponse {
   bookDetailCode: string;
 
   @Expose()
+  @Transform(({ obj }) => obj.bookId)
   bookId: number;
 
   @Expose()
+  @Transform(({ obj }) => obj.publisherId)
   publisherId: number;
+  
+  @Expose()
+  @Transform(({ obj }) => obj.authorId)
+  authorId: number;
 
   @Expose()
   language: string;

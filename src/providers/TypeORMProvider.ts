@@ -16,6 +16,14 @@ import { Image } from 'databases/postgres/entities/Image';
 import { Book } from 'databases/postgres/entities/Book';
 import { BookDetail } from 'databases/postgres/entities/BookDetail';
 import { Publisher } from 'databases/postgres/entities/Publisher';
+import { Account } from 'databases/postgres/entities/Account';
+import { Customer } from 'databases/postgres/entities/Customer';
+import { Employee } from 'databases/postgres/entities/Employee';
+import { Cart } from 'databases/postgres/entities/Cart';
+import { Promotion } from 'databases/postgres/entities/Promotion';
+import { CartDetail } from 'databases/postgres/entities/CartDetail';
+import { PaymentMethod } from 'databases/postgres/entities/PaymentMethod';
+import { Invoice } from 'databases/postgres/entities/Invoice';
 
 @Service()
 export default class TypeORMProvider extends ServiceProvider {
@@ -51,6 +59,14 @@ export default class TypeORMProvider extends ServiceProvider {
         Book,
         BookDetail,
         Publisher,
+        Account,
+        Customer,
+        Employee,
+        Cart,
+        Promotion,
+        CartDetail,
+        PaymentMethod,
+        Invoice,
         // thêm entity khác nếu có
       ],
 

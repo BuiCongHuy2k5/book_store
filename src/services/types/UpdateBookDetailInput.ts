@@ -3,6 +3,7 @@ export class UpdateBookDetailInput {
   bookDetailCode?: string;
   bookId?: number;
   publisherId?: number;
+  authorId?: number;
   language?: string;
   pages?: number;
   quantity?: number;

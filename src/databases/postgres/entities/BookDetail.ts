@@ -8,6 +8,7 @@ import {
 } from 'typeorm';
 import { Book } from './Book';
 import { Publisher } from './Publisher';
+import { Author } from './Author';
 
 @Entity({ name: 'BookDetail' })
 export class BookDetail {
@@ -30,6 +31,13 @@ export class BookDetail {
 
   @RelationId((bd: BookDetail) => bd.publisher)
   publisherId: number;
+
+  @ManyToOne(() => Author)
+  @JoinColumn({ name: 'AuthorId' })
+  author: Author;
+
+  @RelationId((bd: BookDetail) => bd.author)
+  authorId: number;
 
   @Column({ length: 20, name: 'Language'  })
   language: string;

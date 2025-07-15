@@ -55,7 +55,7 @@ Hệ thống RESTful API hỗ trợ quản lý sách, tác giả, danh mục và
 ### 🗂️ Danh mục (Category)
 
 - `GET /api/category` — Lấy danh sách danh mục
-- `GET /api/category/search?tenDM=Tiểu thuyết` — Tìm kiếm
+- `GET /api/category/search?tenDM=Tiểu thuyết` — Tìm kiếm theo tên/mã
 - `GET /api/category/:id` — Lấy chi tiết
 - `POST /api/category` — Tạo mới
 - `PATCH /api/category/:id` — Cập nhật thông tin
@@ -65,36 +65,91 @@ Hệ thống RESTful API hỗ trợ quản lý sách, tác giả, danh mục và
 
 ### 🏢 Nhà xuất bản (Publisher)
 
-- `GET /api/Nxb` — Lấy danh sách
-- `GET /api/Nxb/search` — Tìm kiếm
-- `GET /api/Nxb/:id` — Lấy chi tiết
-- `POST /api/Nxb/` — Tạo mới
-- `PATCH /api/Nxb/:id` — Cập nhật
-- `DELETE /api/Nxb/:id` — Xóa
-- `PATCH /api/Nxb/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Nxb/:id/restore` — Kích hoạt lại
+- `GET /api/Publisher` — Lấy danh sách
+- `GET /api/Publisher/search` — Tìm kiếm
+- `GET /api/Publisher/:id` — Lấy chi tiết
+- `POST /api/Publisher/` — Tạo mới
+- `PATCH /api/Publisher/:id` — Cập nhật
+- `DELETE /api/Publisher/:id` — Xóa
+- `PATCH /api/Publisher/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/Publisher/:id/restore` — Kích hoạt lại
 
-### 🏢 NGÔN NGỮ (LANGUAGE)
+### 🏢 TÀI KHOẢN (ACCOUNT)
 
-- `GET /api/language` — Lấy danh sách
-- `GET /api/language/search` — Tìm kiếm
-- `GET /api/language/:id` — Lấy chi tiết
-- `POST /api/language/` — Tạo mới
-- `PATCH /api/language/:id` — Cập nhật
-- `DELETE /api/language/:id` — Xóa
-- `PATCH /api/language/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/language/:id/restore` — Kích hoạt lại
+- `GET /api/Account` — Lấy danh sách
+- `GET /api/Account/search` — Tìm kiếm
+- `GET /api/Account/:id` — Lấy chi tiết
+- `POST /api/Account/` — Tạo mới
+- `PATCH /api/Account/:id` — Cập nhật
+- `DELETE /api/Account/:id` — Xóa
+- `PATCH /api/Account/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/Account/:id/restore` — Kích hoạt lại
 
 ### 🏢 SÁCH CHI TIẾT (BOOK DETAILS)
 
-- `GET /api/SachCT` — Lấy danh sách
-- `GET /api/SachCT/search` — Tìm kiếm
-- `GET /api/SachCT/:id` — Lấy chi tiết
-- `POST /api/SachCT/` — Tạo mới
-- `PATCH /api/SachCT/:id` — Cập nhật
-- `DELETE /api/SachCT/:id` — Xóa
-- `PATCH /api/SachCT/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/SachCT/:id/restore` — Kích hoạt lại
+- `GET /api/BookDetail` — Lấy danh sách
+- `GET /api/BookDetail/search` — Tìm kiếm
+- `GET /api/BookDetail/:id` — Lấy chi tiết
+- `POST /api/BookDetail/` — Tạo mới
+- `PATCH /api/BookDetail/:id` — Cập nhật
+- `DELETE /api/BookDetail/:id` — Xóa
+- `PATCH /api/SacBookDetailhCT/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/BookDetail/:id/restore` — Kích hoạt lại
+
+### 🏢 KHÁCH HÀNG (CUSTOMER)
+
+- `GET /api/Customer` — Lấy danh sách
+- `GET /api/Customer/search` — Tìm kiếm
+- `GET /api/Customer/:id` — Lấy chi tiết
+- `POST /api/Customer/` — Tạo mới
+- `PATCH /api/Customer/:id` — Cập nhật
+- `DELETE /api/Customer/:id` — Xóa
+- `PATCH /api/Customer/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/Customer/:id/restore` — Kích hoạt lại
+
+### 🏢 NHÂN VIÊN (EMPLOYEE)
+
+- `GET /api/Employee` — Lấy danh sách
+- `GET /api/Employee/search` — Tìm kiếm
+- `GET /api/Employee/:id` — Lấy chi tiết
+- `POST /api/Employee/` — Tạo mới
+- `PATCH /api/Employee/:id` — Cập nhật
+- `DELETE /api/Employee/:id` — Xóa
+- `PATCH /api/Employee/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/Employee/:id/restore` — Kích hoạt lại
+
+### 🏢 ẢNH (IMAGE)
+
+- `GET /api/Image` — Lấy danh sách
+- `GET /api/Image/search` — Tìm kiếm
+- `GET /api/Image/:id` — Lấy chi tiết
+- `POST /api/Image/` — Tạo mới
+- `PATCH /api/Image/:id` — Cập nhật
+- `DELETE /api/Image/:id` — Xóa
+- `PATCH /api/Image/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/Image/:id/restore` — Kích hoạt lại
+
+### 🏢 GIỎ HÀNG (CART)
+
+- `GET /api/Cart` — Lấy danh sách
+- `GET /api/Cart/search` — Tìm kiếm
+- `GET /api/Cart/:id` — Lấy chi tiết
+- `POST /api/Cart/` — Tạo mới
+- `PATCH /api/Cart/:id` — Cập nhật
+- `DELETE /api/Cart/:id` — Xóa
+- `PATCH /api/Cart/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/Cart/:id/restore` — Kích hoạt lại
+
+### 🏢 KHUYẾN MÃI (PROMOTION)
+
+- `GET /api/Promotion` — Lấy danh sách
+- `GET /api/Promotion/search` — Tìm kiếm
+- `GET /api/Promotion/:id` — Lấy chi tiết
+- `POST /api/Promotion/` — Tạo mới
+- `PATCH /api/Promotion/:id` — Cập nhật
+- `DELETE /api/Promotion/:id` — Xóa
+- `PATCH /api/Promotion/:id/inactivate` — Ngưng hoạt động
+- `PATCH /api/Promotion/:id/restore` — Kích hoạt lại
 
 ## ⚙️ Cài đặt & chạy dự án
 

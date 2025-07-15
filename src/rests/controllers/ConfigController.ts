@@ -8,7 +8,7 @@ import { Logger } from '@Decorators/Logger';
 
 import { WinstonLogger } from '@Libs/WinstonLogger';
 
-import { RestRoles } from '@Enums/RestRoles';
+import { RestRoles, Role } from '@Enums/RestRoles';
 import { LogLevel } from '@Enums/LogLevel';
 
 import { ErrorCode } from '@Errors/ErrorCode';
@@ -28,13 +28,13 @@ export class ConfigController {
     private configService: ConfigService,
   ) {}
 
-  @Authorized(RestRoles.ADMIN)
+  @Authorized(Role.ADMIN)
   @Post('/expire')
   public async expire(@QueryParam('prefix') prefix: string) {
     return await this.configService.expireConfigs(prefix);
   }
 
-  @Authorized(RestRoles.ADMIN)
+  @Authorized(Role.ADMIN)
   @Get('/keys')
   public async keys(@QueryParam('prefix') prefix: string) {
     return await this.configService.keys(prefix);
@@ -49,7 +49,7 @@ export class ConfigController {
     return 'OK';
   }
 
-  // @Authorized(RestRoles.ADMIN)
+  // @Authorized(Role.ADMIN)
   @Post('/test')
   public async test(@Body() body: TestBody) {
     this.logger.debug('body: ', body);

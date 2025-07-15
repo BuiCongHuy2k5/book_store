@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, IsNumber, IsOptional } from 'class-validator';
+import { Language, RestRoles } from '@Enums/RestRoles';
+import { IsNotEmpty, IsString, IsNumber, IsOptional, IsEnum } from 'class-validator';
 
 export class CreateBookDetailRequest {
   @IsNotEmpty()
@@ -14,8 +15,11 @@ export class CreateBookDetailRequest {
   publisherId: number;
 
   @IsNotEmpty()
-  @IsString()
-  language: string;
+  @IsNumber()
+  authorId: number;
+
+  @IsEnum(Language, { message: 'language must be one of: VI, EN, DE, FR, YT, ES' })
+  language: Language;
 
   @IsNotEmpty()
   @IsNumber()

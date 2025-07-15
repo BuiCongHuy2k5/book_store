@@ -36,8 +36,8 @@ export class BookController {
     @QueryParam('bookId') bookId?: number
   ) {
     const result = await this.bookService.search({ bookCode, bookId });
-    return result.map(s =>
-      plainToInstance(CreateBookResponse, s, { excludeExtraneousValues: true })
+    return result.map(map =>
+      plainToInstance(CreateBookResponse, map, { excludeExtraneousValues: true })
     );
   }
 

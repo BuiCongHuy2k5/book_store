@@ -1,19 +1,20 @@
-import { Exclude, Expose } from 'class-transformer';
+import { IsNumber, IsOptional, IsString } from 'class-validator';
 
-@Exclude()
-export class CreateImageResponse {
-  @Expose()
-  imageId: number;
 
-  @Expose()
+export class UpdateImageRequest {
+  @IsOptional()
+  @IsNumber()
   bookDetailId: number;
 
-  @Expose()
+  @IsOptional()
+  @IsString()
   link: string;
 
-  @Expose()
+  @IsOptional()
+  @IsString()
   name: string;
 
-  @Expose()
+  @IsOptional()
+  @IsString()
   size: string;
 }

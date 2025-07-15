@@ -1,19 +1,19 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { Exclude, Expose } from 'class-transformer';
 
-export class CreateImageRequest {
-  @IsNotEmpty()
-  @IsNumber()
+@Exclude()
+export class CreateImageResponse {
+  @Expose()
+  imageId: number;
+
+  @Expose()
   bookDetailId: number;
 
-  @IsNotEmpty()
-  @IsString()
+  @Expose()
   link: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @Expose()
   name: string;
 
-  @IsNotEmpty()
-  @IsString()
+  @Expose()
   size: string;
 }

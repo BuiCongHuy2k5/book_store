@@ -1,4 +1,5 @@
-import { IsOptional, IsString, IsNumber } from 'class-validator';
+import { Language, RestRoles } from '@Enums/RestRoles';
+import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
 
 export class UpdateBookDetailRequest {
   @IsOptional()
@@ -14,8 +15,11 @@ export class UpdateBookDetailRequest {
   publisherId?: number;
 
   @IsOptional()
-  @IsString()
-  language?: string;
+  @IsNumber()
+  authorId?: number;
+
+  @IsEnum(Language, { message: 'language must be one of: VI, EN, DE, FR, YT, ES' })
+  language?: Language;
 
   @IsOptional()
   @IsNumber()
@@ -34,6 +38,6 @@ export class UpdateBookDetailRequest {
   description?: string;
 
   @IsOptional()
-  @IsString()
+  @IsEnum(RestRoles)
   status?: string;
 }

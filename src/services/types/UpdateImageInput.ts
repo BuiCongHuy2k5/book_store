@@ -1,6 +1,7 @@
-export class CreateImageInput {
-  bookDetailId: number;
-  link: string;
-  name: string;
-  size: string;
+export class UpdateImageInput {
+ imageId: number;
+  bookDetailId?: number;
+  link?: string;
+  name?: string;
+  size?: string;
 }

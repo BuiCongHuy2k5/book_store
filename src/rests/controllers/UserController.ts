@@ -89,21 +89,21 @@ async partialUpdate(
     return this.userService.delete(params.id);
   }
 
-  @Get('/me')
-  async getMe(@Req() req: Request) {
-    const userId = (req as any).identity;
+  // @Get('/me')
+  // async getMe(@Req() req: Request) {
+  //   const userId = (req as any).identity;
 
-    if (!userId) {
-      throw new Error('Không xác thực được người dùng');
-    }
+  //   if (!userId) {
+  //     throw new Error('Không xác thực được người dùng');
+  //   }
 
-    const user = await this.userService.getById(userId);
-    return {
-      message: 'Thông tin người dùng từ token',
-      user: plainToInstance(CreateUserResponse, user, {
-        excludeExtraneousValues: true
-      })
-    };
-  }
+  //   const user = await this.userService.getById(userId);
+  //   return {
+  //     message: 'Thông tin người dùng từ token',
+  //     user: plainToInstance(CreateUserResponse, user, {
+  //       excludeExtraneousValues: true
+  //     })
+  //   };
+  // }
 
 }
