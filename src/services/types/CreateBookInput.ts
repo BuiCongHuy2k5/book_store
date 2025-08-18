@@ -1,7 +1,9 @@
 export class CreateBookInput {
   bookCode: string;
   bookName: string;
-  categoryId: number;
+  cateId: number;
   authorId: number;
-  status: string;
+  publisherId: number;
+  status?: string;
+  imageurl: string;
 }

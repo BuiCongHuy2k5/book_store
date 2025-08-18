@@ -26,7 +26,10 @@ export default class HttpProvider extends ServiceProvider {
   private httpServer: Server;
   private keycloak: Alohomora;
 
-  constructor(@Inject('rootPath') private readonly rootPath: string, @Logger(module) private logger: winston.Logger) {
+  constructor(
+    @Inject('rootPath') private readonly rootPath: string,
+    @Logger(module) private logger: winston.Logger,
+  ) {
     super();
   }
 
@@ -51,11 +54,13 @@ export default class HttpProvider extends ServiceProvider {
     });
     const cspDefaults = helmet.contentSecurityPolicy.getDefaultDirectives();
     delete cspDefaults['upgrade-insecure-requests'];
-    this.expressApp.use(helmet({
-      contentSecurityPolicy: {
-        directives: cspDefaults,
-      },
-    }));
+    this.expressApp.use(
+      helmet({
+        contentSecurityPolicy: {
+          directives: cspDefaults,
+        },
+      }),
+    );
     this.expressApp.use(env.app.routePrefix || '/api', this.keycloak.init());
     useExpressServer(this.expressApp, {
       cors: true,
@@ -96,19 +101,19 @@ export default class HttpProvider extends ServiceProvider {
   }
 
   async close() {
-  this.logger.info('Closing http server.');
-  return new Promise<void>((resolve, reject) => {
-    this.httpServer.close(async () => {
-      this.logger.info('Http server closed.');
-      try {
-        await mongoose.connection.close(false);
-        this.logger.info('MongoDb connection closed.');
-        resolve();
-      } catch (err) {
-        this.logger.error('Error closing MongoDb connection.', err);
-        reject(err);
-      }
+    this.logger.info('Closing http server.');
+    return new Promise<void>((resolve, reject) => {
+      this.httpServer.close(async () => {
+        this.logger.info('Http server closed.');
+        try {
+          await mongoose.connection.close(false);
+          this.logger.info('MongoDb connection closed.');
+          resolve();
+        } catch (err) {
+          this.logger.error('Error closing MongoDb connection.', err);
+          reject(err);
+        }
+      });
     });
-  });
-}
+  }
 }

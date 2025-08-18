@@ -1,4 +1,5 @@
-import { IsNotEmpty, IsString, IsNumber } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNotEmpty, IsString, IsNumber, IsObject, ValidateNested } from 'class-validator';
 
 export class CreateBookRequest {
   @IsNotEmpty()
@@ -11,11 +12,17 @@ export class CreateBookRequest {
 
   @IsNotEmpty()
   @IsNumber()
-  categoryId: number;
+  cateId: number;
 
   @IsNotEmpty()
   @IsNumber()
   authorId: number;
 
-  status: string;
+  @IsNotEmpty()
+  @IsNumber()
+  publisherId: number;
+
+  @IsNotEmpty()
+  @IsString()
+  imageurl: string;
 }

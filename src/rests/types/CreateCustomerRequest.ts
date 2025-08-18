@@ -1,20 +1,20 @@
-import { RestRoles, Role } from '@Enums/RestRoles';
-import { IsNotEmpty, Length, IsEmail, IsEnum, Matches } from 'class-validator';
+import { Gender, RestRoles } from '@Enums/RestRoles';
+import { IsNotEmpty, Length, IsEmail, IsEnum, Matches, IsString } from 'class-validator';
 
 export class CreateCustomerRequest {
   @IsNotEmpty()
-  @Length(1, 50)
+  @IsString()
   customerCode: string;
 
   @IsNotEmpty()
-  @Length(1, 100)
+  @IsString()
   customerName: string;
 
-  @IsEnum(RestRoles, { message: 'GENDER ONLY FEMALE OR MALE' })
+  @IsEnum(Gender, { message: 'GENDER ONLY FEMALE OR MALE' })
   gender: string;
 
   @IsNotEmpty()
-  @Length(1, 20)
+  @IsString()
   @Matches(/^(0|\+84)\d{9}$/, {
     message: 'INVALID PHONE NUMBER, MINIMUM 10 DIGITS AND NO LETTERS',
   })
@@ -25,11 +25,10 @@ export class CreateCustomerRequest {
   @Matches(/^[\w-\.]+@gmail\.com$/, {
     message: 'EMAIL MUST BE A VALID EMAIL ADDRESS @gmail.com',
   })
-  @Length(1, 100)
   email: string;
 
   @IsNotEmpty()
-  @Length(1, 255)
+  @IsString()
   address: string;
 
   @IsNotEmpty()

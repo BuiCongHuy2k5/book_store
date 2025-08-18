@@ -2,7 +2,16 @@ import * as path from 'path';
 
 import * as dotenv from 'dotenv';
 
-import { getOsEnv, getOsPaths, normalizePort, toBool, toNumber, toArray, toOptionalNumber, getOsEnvOptional } from '@Libs/env/utils';
+import {
+  getOsEnv,
+  getOsPaths,
+  normalizePort,
+  toBool,
+  toNumber,
+  toArray,
+  toOptionalNumber,
+  getOsEnvOptional,
+} from '@Libs/env/utils';
 
 /**
  * Load .env file or for tests the .env.test file.
@@ -73,8 +82,8 @@ export const env = {
     subscriptionPath: getOsEnv('GRAPHQL_SUBSCRIPTION_PATH'),
   },
   redis: {
-    nodes: getOsEnv('REDIS_NODES') || '',
-    defaultExpirationTimeInSeconds: toNumber(getOsEnv('REDIS_DEFAULT_EXPIRATION_TIME_IN_SECONDS')) || 24 * 60 * 60, //1 days
+    url: getOsEnv('REDIS_URL_DOCKER') || 'redis://redis:6379', // Chỉ sử dụng REDIS_URL từ biến môi trường hoặc URL mặc định
+    defaultExpirationTimeInSeconds: toNumber(process.env.REDIS_DEFAULT_EXPIRE) || 300, // Đặt thời gian hết hạn mặc định
   },
   jwt: {
     publicKey: getOsEnvOptional('JWT_PUBLIC_KEY'),
@@ -100,3 +109,11 @@ export const env = {
     tokenUri: `${getOsEnv('KEYCLOAK_SERVER_URL')}/realms/${getOsEnv('KEYCLOAK_REALM')}/protocol/openid-connect/token`,
   },
 };
+export const envResolved = {
+  ...env.redis,
+  redis: {
+    url: env.redis.url,
+  },
+};
+
+

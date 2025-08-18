@@ -8,8 +8,10 @@ const lambda = new AWS.Lambda({
 });
 
 export async function invoke(name: string, params: any) {
-  return lambda.invoke({
-    FunctionName: name,
-    Payload: JSON.stringify(params),
-  }).promise();
+  return lambda
+    .invoke({
+      FunctionName: name,
+      Payload: JSON.stringify(params),
+    })
+    .promise();
 }

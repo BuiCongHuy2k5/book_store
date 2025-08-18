@@ -27,6 +27,8 @@ module.exports = {
    * @param {import('mongodb').MongoClient} client
    */
   async down(db, client) {
-    await db.collection('configs').deleteMany({ key: { $in: ['CONFIG_BSC_JSON_RPC_ENDPOINT', 'CONFIG_ETH_THE_GRAPH_URL', 'CONFIG_BSC_THE_GRAPH_URL'] } });
+    await db.collection('configs').deleteMany({
+      key: { $in: ['CONFIG_BSC_JSON_RPC_ENDPOINT', 'CONFIG_ETH_THE_GRAPH_URL', 'CONFIG_BSC_THE_GRAPH_URL'] },
+    });
   },
 };

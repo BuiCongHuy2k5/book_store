@@ -1,10 +1,9 @@
-import { Inject, Service } from "typedi";
-import { BaseOrmRepository } from "./BaseOrmRepository";
-import { Logger } from "@Decorators/Logger";
-import winston from "winston";
-import { DataSource, DeepPartial } from "typeorm";
-import { Category } from "databases/postgres/entities/Category";
-
+import { Inject, Service } from 'typedi';
+import { BaseOrmRepository } from './BaseOrmRepository';
+import { Logger } from '@Decorators/Logger';
+import winston from 'winston';
+import { DataSource, DeepPartial } from 'typeorm';
+import { Category } from 'databases/postgres/entities/Category';
 
 @Service()
 export class CategoryRepository extends BaseOrmRepository<Category> {
@@ -20,15 +19,15 @@ export class CategoryRepository extends BaseOrmRepository<Category> {
   }
 
   async getById(id: number): Promise<Category | null> {
-    return this.repo.findOneBy({ categoryId: id });
+    return this.repo.findOneBy({ id: id });
   }
 
-  async search(filters: { categoryName?: string }): Promise<Category[]> {
+  async search(filters: { cateName?: string }): Promise<Category[]> {
     const query = this.repo.createQueryBuilder('Category');
 
-    if (filters.categoryName) {
-      query.where('LOWER(Category.CategoryName) LIKE LOWER(:categoryName)', {
-        categoryName: `%${filters.categoryName}%`,
+    if (filters.cateName) {
+      query.where('LOWER(Category.cateName) LIKE LOWER(:cateName)', {
+        cateName: `%${filters.cateName}%`,
       });
     }
 
@@ -44,17 +43,17 @@ export class CategoryRepository extends BaseOrmRepository<Category> {
     await this.repo.delete(id);
   }
 
-  async isCategoryCodeExist(categoryName: string): Promise<boolean> {
-    const found = await this.repo.findOneBy({ categoryName: categoryName });
-    return !!found;
-  }
+  // async isCategoryCodeExist(categoryName: string): Promise<boolean> {
+  //   const found = await this.repo.findOneBy({ categoryName: categoryName });
+  //   return !!found;
+  // }
 
-  async isCategoryNamexistForOther(id: number, categoryName: string): Promise<boolean> {
-    const found = await this.repo
-      .createQueryBuilder('Category')
-      .where('Category.CategoryName = :categoryName AND Category.CategoryId != :id', { categoryName, id })
-      .getOne();
+  // async isCategoryNamexistForOther(id: number, categoryName: string): Promise<boolean> {
+  //   const found = await this.repo
+  //     .createQueryBuilder('Category')
+  //     .where('Category.CategoryName = :categoryName AND Category.CategoryId != :id', { categoryName, id })
+  //     .getOne();
 
-    return !!found;
-  }
+  //   return !!found;
+  // }
 }

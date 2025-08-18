@@ -1,22 +1,32 @@
-FROM node:20.12.2-bookworm as builder
+# Stage 1: Build
+FROM node:20-bookworm AS builder
 
-# Create work directory
 WORKDIR /app
 
-# Install runtime dependencies
-# RUN npm install yarn -g
-COPY package.json /app
-COPY yarn.lock /app
+# Copy package files trước để cache cài dependencies
+COPY package.json yarn.lock ./
 RUN yarn install
 
-FROM node:20.12.2-bookworm
-# Create work directory
-WORKDIR /app
-# Copy app source to work directory
-COPY --from=builder /app/ /app/
-COPY . /app
-# Build and run the app
+# Copy toàn bộ source code
+COPY . .
+
+# Build TypeScript
 RUN yarn build
 
-# ENV NODE_ENV=production
-CMD node dist/index
+# Stage 2: Run
+FROM node:20-bookworm AS runtime
+
+WORKDIR /app
+
+# Copy từ stage builder
+COPY --from=builder /app/dist ./dist
+COPY package.json yarn.lock ./
+RUN yarn install --production
+
+# Expose port
+EXPOSE 3001
+
+# Run app
+CMD ["yarn", "dev"]
+
+-

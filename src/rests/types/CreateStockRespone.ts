@@ -1,19 +1,22 @@
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class CreateImageResponse {
+export class CreateStockResponse {
   @Expose()
-  imageId: number;
+  stockId: number;
 
   @Expose()
   bookDetailId: number;
 
   @Expose()
-  link: string;
+  quantity: number;
 
   @Expose()
-  name: string;
+  status: string;
 
   @Expose()
-  size: string;
+  createdAt: Date;
+
+  @Expose()
+  updatedAt: Date;
 }

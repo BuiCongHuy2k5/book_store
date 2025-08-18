@@ -15,11 +15,15 @@ export class UpdateInvoiceRequest {
 
   @IsOptional()
   @IsNumber()
-  totalAmount?: number;
+  price?: number;
 
   @IsOptional()
-  @IsString()
-  bookName?: string;
+  @IsNumber()
+  quantity?: number;
+
+  @IsOptional()
+  @IsNumber()
+  bookId?: number;
 
   @IsOptional()
   @IsString()

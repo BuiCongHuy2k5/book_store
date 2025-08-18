@@ -1,4 +1,3 @@
-
 import winston from 'winston';
 import { Container, Inject, Service } from 'typedi';
 import { DataSource, DataSourceOptions } from 'typeorm';
@@ -11,19 +10,15 @@ import { appEvent } from '@Libs/appEvent';
 import { getLoggingLevel } from '@Libs/helper';
 import { TypeORMLogger } from '@Libs/TypeORMLogger';
 import { Category } from 'databases/postgres/entities/Category';
-import { Author } from 'databases/postgres/entities/Author';
-import { Image } from 'databases/postgres/entities/Image';
 import { Book } from 'databases/postgres/entities/Book';
-import { BookDetail } from 'databases/postgres/entities/BookDetail';
-import { Publisher } from 'databases/postgres/entities/Publisher';
-import { Account } from 'databases/postgres/entities/Account';
+import { Author } from 'databases/postgres/entities/Author';
 import { Customer } from 'databases/postgres/entities/Customer';
 import { Employee } from 'databases/postgres/entities/Employee';
-import { Cart } from 'databases/postgres/entities/Cart';
-import { Promotion } from 'databases/postgres/entities/Promotion';
-import { CartDetail } from 'databases/postgres/entities/CartDetail';
-import { PaymentMethod } from 'databases/postgres/entities/PaymentMethod';
 import { Invoice } from 'databases/postgres/entities/Invoice';
+import { Cart } from 'databases/postgres/entities/Cart';
+import { Publisher } from 'databases/postgres/entities/Publisher';
+import { Inventory } from 'databases/postgres/entities/Inventory';
+import { Account } from 'databases/postgres/entities/Account';
 
 @Service()
 export default class TypeORMProvider extends ServiceProvider {
@@ -31,7 +26,7 @@ export default class TypeORMProvider extends ServiceProvider {
 
   constructor(
     @Logger(module) private logger: winston.Logger,
-    @Inject('rootPath') private readonly rootPath: string
+    @Inject('rootPath') private readonly rootPath: string,
   ) {
     super();
   }
@@ -46,29 +41,13 @@ export default class TypeORMProvider extends ServiceProvider {
       username: String(env.db.username),
       password: String(env.db.password),
       database: String(env.db.database),
-      synchronize: env.db.synchronize = false, // ✅ KHÔNG được gán lại biến môi trường
+      synchronize: (env.db.synchronize = true), // ✅ KHÔNG được gán lại biến môi trường
       logging: loggingOptions,
       logger: new TypeORMLogger(loggingOptions),
       migrations: env.db.migrations || [],
 
       // ✅ Dùng import trực tiếp các entity class
-      entities: [
-        Category,
-        Image,
-        Author,
-        Book,
-        BookDetail,
-        Publisher,
-        Account,
-        Customer,
-        Employee,
-        Cart,
-        Promotion,
-        CartDetail,
-        PaymentMethod,
-        Invoice,
-        // thêm entity khác nếu có
-      ],
+      entities: [Category, Book, Author, Customer, Employee, Invoice, Cart, Publisher, Inventory, Account],
 
       cache: true,
     };

@@ -1,12 +1,21 @@
-import { Body, Delete, Get, JsonController, Params, Patch, Post, Put, QueryParam, Req, UseBefore } from 'routing-controllers';
+import {
+  Body,
+  Delete,
+  Get,
+  JsonController,
+  Params,
+  Patch,
+  Post,
+  Put,
+  QueryParam,
+  Req,
+  UseBefore,
+} from 'routing-controllers';
 import { OpenAPI } from 'routing-controllers-openapi';
 import winston from 'winston';
 import { Service } from 'typedi';
 
 import { Logger } from '@Decorators/Logger';
-
-
-
 
 import { ConfigService } from '@Services/ConfigService';
 import { UserService } from '@Services/UserService';
@@ -22,7 +31,6 @@ import { LoginUserRequest } from '@Rests/types/LoginUserRequest';
 import { AuthenticationMiddleware } from '@Middlewares/rest/AuthenticationMiddleware';
 import { Request } from 'express';
 
-
 @Service()
 @JsonController('/users')
 @OpenAPI({ security: [{ BearerToken: [] }] })
@@ -37,7 +45,7 @@ export class UserController {
     const input: CreateUserInput = { ...body };
     const user = await this.userService.register(input);
     return plainToInstance(CreateUserResponse, user, {
-      excludeExtraneousValues: true
+      excludeExtraneousValues: true,
     });
   }
 
@@ -48,8 +56,8 @@ export class UserController {
     return plainToInstance(LoginUserRespone, {
       token,
       user: plainToInstance(CreateUserResponse, user, {
-        excludeExtraneousValues: true
-      })
+        excludeExtraneousValues: true,
+      }),
     });
   }
 
@@ -57,18 +65,18 @@ export class UserController {
   async create(@Body() body: CreateUserRequest): Promise<CreateUserResponse> {
     const user = await this.userService.createUser(body);
     return plainToInstance(CreateUserResponse, user, {
-      excludeExtraneousValues: true
+      excludeExtraneousValues: true,
     });
   }
 
   @Get('/search')
-async search(
-  @QueryParam('name') name?: string,
-  @QueryParam('email') email?: string,
+  async search(
+    @QueryParam('name') name?: string,
+    @QueryParam('email') email?: string,
     @QueryParam('birtDate') birtDate?: Date,
-) {
-  return this.userService.search({ name, email, birtDate});
-}
+  ) {
+    return this.userService.search({ name, email, birtDate });
+  }
 
   @Get('/:id')
   async getById(@Params() params: { id: number }) {
@@ -77,12 +85,13 @@ async search(
   }
 
   @Patch('/:id')
-async partialUpdate(
-  @Params() params: { id: number },@Body({ validate: true }) req: UpdateUserRequest) {
+  async partialUpdate(@Params() params: { id: number }, @Body({ validate: true }) req: UpdateUserRequest) {
     const input: UpdateUserInput = {
-    id: params.id,...req};
-  return this.userService.partialUpdate(input);
-}
+      id: params.id,
+      ...req,
+    };
+    return this.userService.partialUpdate(input);
+  }
 
   @Delete('/:id')
   async delete(@Params() params: { id: number }) {
@@ -105,5 +114,4 @@ async partialUpdate(
   //     })
   //   };
   // }
-
 }

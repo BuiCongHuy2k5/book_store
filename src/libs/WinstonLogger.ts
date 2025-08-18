@@ -42,8 +42,7 @@ function replacer(key, value) {
   // safe-stable-stringify does support BigInt, however, it doesn't wrap the value in quotes.
   // Leading to a loss in fidelity if the resulting string is parsed.
   // It would also be a breaking change for logform.
-  if (typeof value === 'bigint')
-    return value.toString();
+  if (typeof value === 'bigint') return value.toString();
   return value;
 }
 
@@ -62,9 +61,7 @@ const all = format((info: any) => {
     message,
     level: info.level,
     err: info.err,
-    error: info.stack
-      ? { type: info.name, message: info.message, stack_trace: info.stack }
-      : undefined,
+    error: info.stack ? { type: info.name, message: info.message, stack_trace: info.stack } : undefined,
     serviceName: info.serviceName,
     [LEVEL]: info[LEVEL],
     customData: info.customData,
@@ -77,14 +74,18 @@ const serviceName = format((info: any) => {
 
 const json = format((info: any, opts: any) => {
   const jsonStringify = safegify.configure(opts);
-  info[MESSAGE] = jsonStringify({
-    level: info.level,
-    message: info.message,
-    serviceName: info.serviceName,
-    timestamp: info.timestamp,
-    fileName: info.fileName,
-    stack: info.stack,
-  }, opts.replacer || replacer, opts.space);
+  info[MESSAGE] = jsonStringify(
+    {
+      level: info.level,
+      message: info.message,
+      serviceName: info.serviceName,
+      timestamp: info.timestamp,
+      fileName: info.fileName,
+      stack: info.stack,
+    },
+    opts.replacer || replacer,
+    opts.space,
+  );
   return info;
 });
 
@@ -123,29 +124,23 @@ export class WLogger {
 
   public create(thisModule: NodeModule) {
     const logger = winston.createLogger({
-      format: env.log.json ?
-        combine(
-          serviceName(),
-          errors({ stack: true }),
-          all(),
-          file(thisModule)(),
-          ecsFormat(),
-        ) :
-        combine(
-          ignoreAuthorization(),
-          errors({ stack: true }),
-          !nonLocalEnvs.includes(process.env.NODE_ENV) ? colorize() : format(upperCase)(),
-          all(),
-          file(thisModule)(),
-          timestamp(),
-          align(),
-          printf(
-            info =>
-              `[${info.timestamp}] ${info.level}  [${info.fileName}]: ${info.message} ${
-                info.error || info.err ? `\n${info.error?.stack_trace || info.err?.stack || '' }` : ''
-              }`,
+      format: env.log.json
+        ? combine(serviceName(), errors({ stack: true }), all(), file(thisModule)(), ecsFormat())
+        : combine(
+            ignoreAuthorization(),
+            errors({ stack: true }),
+            !nonLocalEnvs.includes(process.env.NODE_ENV) ? colorize() : format(upperCase)(),
+            all(),
+            file(thisModule)(),
+            timestamp(),
+            align(),
+            printf(
+              info =>
+                `[${info.timestamp}] ${info.level}  [${info.fileName}]: ${info.message} ${
+                  info.error || info.err ? `\n${info.error?.stack_trace || info.err?.stack || ''}` : ''
+                }`,
+            ),
           ),
-        ),
       transports: [this.transport],
     });
     return logger;

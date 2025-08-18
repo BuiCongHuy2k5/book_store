@@ -1,10 +1,9 @@
-import { Inject, Service } from "typedi";
-import { BaseOrmRepository } from "./BaseOrmRepository";
-import { Logger } from "@Decorators/Logger";
-import winston from "winston";
-import { DataSource, DeepPartial } from "typeorm";
-import { Account } from "databases/postgres/entities/Account";
-
+import { Inject, Service } from 'typedi';
+import { BaseOrmRepository } from './BaseOrmRepository';
+import { Logger } from '@Decorators/Logger';
+import winston from 'winston';
+import { DataSource, DeepPartial } from 'typeorm';
+import { Account } from 'databases/postgres/entities/Account';
 
 @Service()
 export class AccountRepository extends BaseOrmRepository<Account> {
@@ -19,16 +18,16 @@ export class AccountRepository extends BaseOrmRepository<Account> {
     return this.repo.save(Account);
   }
 
-  async getById(accountId: number): Promise<Account | null> {
-    return this.repo.findOneBy({ accountId: accountId });
+  async getById(id: number): Promise<Account | null> {
+    return this.repo.findOneBy({ id });
   }
 
-  async search(filters: { username?: string}): Promise<Account[]> {
-    const query = this.repo.createQueryBuilder('Account');
+  async search(filters: { userName?: string }): Promise<Account[]> {
+    const query = this.repo.createQueryBuilder('account');
 
-    if (filters.username) {
-      query.andWhere('LOWER(Account.Username) LIKE LOWER(:username)', {
-        username: `%${filters.username}%`,
+    if (filters.userName) {
+      query.andWhere('LOWER(account.userName) LIKE LOWER(:userName)', {
+        userName: `%${filters.userName}%`,
       });
     }
 
@@ -44,17 +43,13 @@ export class AccountRepository extends BaseOrmRepository<Account> {
     await this.repo.delete(id);
   }
 
-  async isUsernameExist(username: string): Promise<boolean> {
-  const account = await this.repo.findOneBy({ username });
-  return !!account;
-}
+  async isUsernameExist(userName: string): Promise<boolean> {
+    const account = await this.repo.findOneBy({ userName });
+    return !!account;
+  }
 
-  // async isAccountExistForOther(id: number, authorCode: string): Promise<boolean> {
-  //   const found = await this.repo
-  //     .createQueryBuilder('Author')
-  //     .where('Author.AuthorCode = :authorCode AND Author.AuthorId != :id', { authorCode, id })
-  //     .getOne();
 
-  //   return !!found;
-  // }
+  async getByUserName(userName: string): Promise<Account | null> {
+    return this.repo.findOneBy({ userName });
+  }
 }

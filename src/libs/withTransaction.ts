@@ -19,5 +19,7 @@ export const withTransaction = async function withTransaction(
     await session.withTransaction(fn);
   } catch (error) {
     throw error;
-  } finally { session.endSession(); }
+  } finally {
+    session.endSession();
+  }
 };

@@ -1,17 +1,17 @@
-import { RestRoles, Role } from '@Enums/RestRoles';
-import { IsOptional, Length, IsEmail, IsEnum, Matches } from 'class-validator';
+import { Gender, RestRoles } from '@Enums/RestRoles';
+import { IsOptional, Length, IsEmail, IsEnum, Matches, IsString } from 'class-validator';
 
 export class UpdateCustomerRequest {
   @IsOptional()
-  @Length(1, 50)
+  @IsString()
   customerCode?: string;
 
   @IsOptional()
-  @Length(1, 100)
+  @IsString()
   customerName?: string;
 
-  @IsEnum(RestRoles, { message: 'GENDER ONLY FEMALE OR MALE' })
-  gender?: string;
+  @IsEnum(Gender, { message: 'GENDER ONLY FEMALE OR MALE' })
+  gender?: Gender;
 
   @IsOptional()
   @Length(1, 20)
@@ -25,17 +25,12 @@ export class UpdateCustomerRequest {
   @Matches(/^[\w-\.]+@gmail\.com$/, {
     message: 'EMAIL MUST BE A VALID EMAIL ADDRESS @gmail.com',
   })
-  @Length(1, 100)
   email?: string;
 
   @IsOptional()
-  @Length(1, 255)
+  @IsString()
   address?: string;
 
   @IsOptional()
-  accountId?: number;
-
-  @IsOptional()
-  @Length(1, 20)
   status?: string;
 }

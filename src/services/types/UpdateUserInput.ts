@@ -1,12 +1,12 @@
-import { RestRoles } from "@Enums/RestRoles";
+import { RestRoles } from '@Enums/RestRoles';
 
 export class UpdateUserInput {
-    id: number;
+  id: number;
   name?: string;
   email?: string;
   phoneNumber?: string;
   userName?: string;
   genDer?: RestRoles;
   birtDate?: Date;
-  passWord?: string; 
+  passWord?: string;
 }

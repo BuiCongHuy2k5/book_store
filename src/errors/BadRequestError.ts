@@ -1,4 +1,3 @@
-    
 export class BadRequestError extends Error {
   public readonly statusCode = 400;
 
@@ -6,5 +5,4 @@ export class BadRequestError extends Error {
     super(message);
     this.name = 'BadRequestError';
   }
-
 }

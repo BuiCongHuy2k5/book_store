@@ -3,7 +3,7 @@ import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
 export class CreateUserResponse {
- @Expose()
+  @Expose()
   id: number;
 
   @Expose()

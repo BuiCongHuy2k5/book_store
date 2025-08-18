@@ -39,7 +39,7 @@ export default class GraphqlProvider extends ServiceProvider {
     @Inject('express') private readonly expressApplication: Express,
     @Inject('rootPath') private readonly rootPath: string,
     @Logger(module) private logger: winston.Logger,
-    @Inject('cache') private readonly cache: Redis.Redis,
+    @Inject('cache') private readonly cache: Redis,
     @Inject('httpServer') private readonly httpServer: HttpServer,
   ) {
     super();
@@ -59,9 +59,11 @@ export default class GraphqlProvider extends ServiceProvider {
       // use document converting middleware
       globalMiddlewares: [LogAccess, TypegooseMiddleware, ErrorHandlerMiddleware],
       // use ObjectId scalar mapping
-      scalarsMap: [{ type: ObjectId, scalar: ObjectIdScalar },
+      scalarsMap: [
+        { type: ObjectId, scalar: ObjectIdScalar },
         { type: Decimal128, scalar: Decimal128Scalar },
-        { type: Date, scalar: DateTimeScalar }],
+        { type: Date, scalar: DateTimeScalar },
+      ],
       validate: {
         skipMissingProperties: false,
         // forbidUnknownValues: true,
@@ -117,8 +119,10 @@ export default class GraphqlProvider extends ServiceProvider {
     await this.server.start();
     this.expressApplication.use(env.graphql.path, json());
     this.expressApplication.use(env.graphql.path, urlencoded({ extended: true }));
-    this.expressApplication.use(env.graphql.path,
-      graphqlUploadExpress({ maxFileSize: env.imageUploader.maxSize, maxFiles: 1 }));
+    this.expressApplication.use(
+      env.graphql.path,
+      graphqlUploadExpress({ maxFileSize: env.imageUploader.maxSize, maxFiles: 1 }),
+    );
     this.expressApplication.use(env.graphql.path, authenticate(this.cache));
     this.server.applyMiddleware({ app: this.expressApplication, path: env.graphql.path });
     appEvent.emit('graphql_started', env.graphql.path);

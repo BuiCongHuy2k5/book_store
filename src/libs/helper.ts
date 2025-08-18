@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { LoggerOptions, LogLevel } from 'typeorm';
 
-export function  getLoggingLevel(logging: string): LoggerOptions {
+export function getLoggingLevel(logging: string): LoggerOptions {
   if (logging.includes(',')) {
     const levels = logging.split(',').filter(level => !!level) as LogLevel[];
     return levels;
@@ -27,7 +27,7 @@ export function now(): number {
 }
 
 export function nowInSeconds(): number {
-  return Math.floor((nowInMilliseconds() / 1000)) | 0;
+  return Math.floor(nowInMilliseconds() / 1000) | 0;
 }
 
 export function secondsToHms(d) {
@@ -46,7 +46,7 @@ export function formatLocalDate(timestamp: number, locales = 'VN') {
   return new Date(timestamp * 1000).toLocaleString(locales);
 }
 
-export function convertUnixTimestampToDate(timestamp: number){
+export function convertUnixTimestampToDate(timestamp: number) {
   if (Number.isNaN(timestamp) || isNaN(timestamp) || timestamp === 0) {
     return new Date();
   }
@@ -64,12 +64,12 @@ export function getCurrentISODateWithoutTime() {
 }
 
 /**
-  * Convert an array to an hashmap to lookup `key` quickly
-  * @param collections The collection to parse hashmap
-  * @param key The field will be the key for hashmap lookup
-  * @returns an object will be used similar to a hashmap
-*/
-export function toMap<T>(collections: T[], key: string): {[k: string]: T} {
+ * Convert an array to an hashmap to lookup `key` quickly
+ * @param collections The collection to parse hashmap
+ * @param key The field will be the key for hashmap lookup
+ * @returns an object will be used similar to a hashmap
+ */
+export function toMap<T>(collections: T[], key: string): { [k: string]: T } {
   return collections.reduce((memo, item) => {
     memo[item[key]] = item;
     return memo;

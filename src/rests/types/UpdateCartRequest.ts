@@ -1,8 +1,7 @@
-import { IsOptional, Length, IsNumber } from 'class-validator';
+import { IsOptional, Length, IsNumber, IsString } from 'class-validator';
 
 export class UpdateCartRequest {
   @IsOptional()
-  @Length(1, 50)
   cartCode?: string;
 
   @IsOptional()
@@ -11,9 +10,20 @@ export class UpdateCartRequest {
 
   @IsOptional()
   @IsNumber()
+  bookId: number;
+
+  @IsOptional()
+  @IsNumber()
   accountId?: number;
 
   @IsOptional()
-  @Length(1, 20)
+  @IsNumber()
+  quantity: number;
+
+  @IsOptional()
+  @IsNumber()
+  price: number;
+
+  @IsOptional()
   status?: string;
 }

@@ -1,13 +1,13 @@
 import { AnyParamConstructor, ReturnModelType } from '@typegoose/typegoose/lib/types';
 import { DocumentType, mongoose } from '@typegoose/typegoose';
-import  { FilterQuery } from 'mongoose';
+import { FilterQuery } from 'mongoose';
 
 import { SortDirection } from '@Enums/SortDirection';
 
 /**
  * A base class for all repository
  * It will define most of the basic query functions
- * 
+ *
  */
 export abstract class BaseRepository<T extends AnyParamConstructor<any>, C> {
   // constructor() {}
@@ -50,9 +50,7 @@ export abstract class BaseRepository<T extends AnyParamConstructor<any>, C> {
     if (sortBy) {
       sort[sortBy] = sortDirection;
     }
-    return this.getModel().find(filters).sort(sort)
-      .skip(skip)
-      .limit(limit);
+    return this.getModel().find(filters).sort(sort).skip(skip).limit(limit);
   }
 
   async bulkWrite(writes: any[]) {

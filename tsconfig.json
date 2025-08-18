@@ -35,9 +35,9 @@
       "@Services/*": ["services/*"],
       "@Sockets/*": ["sockets/*"],
       "@Rests/*": ["rests/*"],
-      "@Resolvers/*": ["resolvers/*"],
+      "@Resolvers/*": ["resolvers/*"]
     }
   },
-  "include": ["./src"],
+  "include": ["src/**/*"],
   "exclude": ["node_modules/*"]
 }

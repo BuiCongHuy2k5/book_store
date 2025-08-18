@@ -7,14 +7,15 @@ import { getLoggingLevel } from '@Libs/helper';
 
 export class TypeORMLogger extends AbstractLogger {
   private logger: winston.Logger;
-  constructor(
-    options: LoggerOptions,
-  ) {
+  constructor(options: LoggerOptions) {
     super(options);
     this.logger = WinstonLogger.create(module);
   }
-  protected writeLog(level: LogLevel, logMessage: string | number | LogMessage | (string | number | LogMessage)[],
-    queryRunner?: QueryRunner): void {
+  protected writeLog(
+    level: LogLevel,
+    logMessage: string | number | LogMessage | (string | number | LogMessage)[],
+    queryRunner?: QueryRunner,
+  ): void {
     const messages = this.prepareLogMessages(logMessage);
     for (const message of messages) {
       switch (message.type ?? level) {

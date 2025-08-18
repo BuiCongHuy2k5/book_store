@@ -1,9 +1,12 @@
 export enum RestRoles {
   GAME_SERVER = 'GAME_SERVER',
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
   ACTIVE = 'ACTIVE',
   INACTIVE = 'INACTIVE',
+}
+
+export enum Gender {
+  MALE = 'MALE',
+  FEMALE = 'FEMALE',
 }
 
 export enum Language {
@@ -12,11 +15,22 @@ export enum Language {
   DE = 'DE',
   FR = 'FR',
   YT = 'YT',
-  ES = 'ES'
+  ES = 'ES',
 }
 
-export enum Role{
+export enum UserRole {
   ADMIN = 'ADMIN',
   USER = 'USER',
 }
 
+export enum StatusInvoice {
+  PAID = 'PAID',
+  CANCELLED = 'CANCELLED',
+}
+
+export enum INVENTORY {
+  IN_STOCK = 'IN STOCK',
+  OUT_OF_STOCK = 'OUTOFSTOCK',
+  LOW_STOCK = 'LOW STOCK',
+  OVER_STOCK = 'OVER_STOCK',
+}

@@ -21,7 +21,7 @@ export const preUpdateMiddleware: PreMiddlewareFunction<Query<any, any>> = funct
   update.$set.updatedAt = new Date();
   if (options?.upsert) {
     update.$setOnInsert = update.$setOnInsert || {};
-    update.$setOnInsert.createdAt =update.$setOnInsert.createdAt || new Date();
+    update.$setOnInsert.createdAt = update.$setOnInsert.createdAt || new Date();
   }
   next();
 };

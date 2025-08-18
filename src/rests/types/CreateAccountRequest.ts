@@ -1,15 +1,15 @@
-import { Role } from '@Enums/RestRoles';
-import { IsEnum, IsNotEmpty, Length } from 'class-validator';
+import { UserRole } from '@Enums/RestRoles';
+import { IsEnum, IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateAccountRequest {
   @IsNotEmpty()
-  @Length(1, 100)
-  username: string;
+  @IsString()
+  userName: string;
 
   @IsNotEmpty()
-  @Length(1, 100)
-  password: string;
+  @IsString()
+  passWord: string;
 
-  @IsEnum(Role, { message: 'ONLY 1 OF 2 ROLES "ADMIN" & "USER" CAN BE SELECTED' })
-  role: string;
+  @IsEnum(UserRole, { message: 'ONLY 1 OF 2 ROLES "ADMIN" & "USER" CAN BE SELECTED' })
+  role: UserRole;
 }

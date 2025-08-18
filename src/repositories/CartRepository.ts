@@ -1,10 +1,9 @@
-import { Inject, Service } from "typedi";
-import { BaseOrmRepository } from "./BaseOrmRepository";
-import { Logger } from "@Decorators/Logger";
-import winston from "winston";
-import { DataSource, DeepPartial } from "typeorm";
-import { Cart } from "databases/postgres/entities/Cart";
-
+import { Inject, Service } from 'typedi';
+import { BaseOrmRepository } from './BaseOrmRepository';
+import { Logger } from '@Decorators/Logger';
+import winston from 'winston';
+import { DataSource, DeepPartial } from 'typeorm';
+import { Cart } from 'databases/postgres/entities/Cart';
 
 @Service()
 export class CartRepository extends BaseOrmRepository<Cart> {
@@ -19,16 +18,32 @@ export class CartRepository extends BaseOrmRepository<Cart> {
     return this.repo.save(cart);
   }
 
-  async getById(cartId: number): Promise<Cart | null> {
-    return this.repo.findOneBy({ cartId: cartId });
+  async getById(id: number): Promise<Cart | null> {
+    return this.repo
+      .createQueryBuilder('cart')
+      .leftJoinAndSelect('cart.book', 'book')
+      .leftJoinAndSelect('cart.account', 'account')
+      .leftJoinAndSelect('cart.customer', 'customer')
+      .where('cart.id = :id', { id })
+      .getOne();
   }
 
-  async search(filters: { cartCode?: string}): Promise<Cart[]> {
-   const query = this.repo.createQueryBuilder('Cart');
+  async search(filters: { bookName?: string; customerName?: string }): Promise<Cart[]> {
+    const query = this.repo
+      .createQueryBuilder('cart')
+      .leftJoinAndSelect('cart.book', 'book')
+      .leftJoinAndSelect('cart.account', 'account')
+      .leftJoinAndSelect('cart.customer', 'customer');
 
-    if (filters.cartCode) {
-      query.andWhere('LOWER(Cart.CartCode) LIKE LOWER(:cartCode)', {
-        cartCode: `%${filters.cartCode}%`,
+    if (filters.bookName) {
+      query.andWhere('LOWER(book.bookName) LIKE LOWER(:bookName)', {
+        bookName: `%${filters.bookName}%`,
+      });
+    }
+
+    if (filters.customerName) {
+      query.andWhere('LOWER(customer.customerName) LIKE LOWER(:customerName)', {
+        customerName: `%${filters.customerName}%`,
       });
     }
 
@@ -51,7 +66,7 @@ export class CartRepository extends BaseOrmRepository<Cart> {
   //     .getOne();
   //   return !!existingCustomer;
   // }
-  
+
   // async isEmailOrPhoneExistForOtherCustomer(customerId: number, email: string, phone: string): Promise<boolean> {
   //   const existingCustomer = await this.repo
   //     .createQueryBuilder('Customer')

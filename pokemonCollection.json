@@ -1,0 +1,106 @@
+[
+  {
+    "color": "default",
+    "type": "chikorita",
+    "size": "large",
+    "name": "Jet",
+    "generation": "gen2",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "totodile",
+    "size": "large",
+    "name": "Bonnie",
+    "generation": "gen2",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "charizard",
+    "size": "large",
+    "name": "Missy",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "pichu",
+    "size": "large",
+    "name": "Lulu",
+    "generation": "gen2",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "pikachu",
+    "size": "large",
+    "name": "Lola",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "mewtwo",
+    "size": "large",
+    "name": "Lola",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "dragonite",
+    "size": "large",
+    "name": "Ollie",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "magmar",
+    "size": "large",
+    "name": "Magmar",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "wobbuffet",
+    "size": "large",
+    "name": "Wobbuffet",
+    "generation": "gen2",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "mrmime",
+    "size": "large",
+    "name": "Mr. Mime",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "onix",
+    "size": "large",
+    "name": "Onix",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "butterfree",
+    "size": "large",
+    "name": "Butterfree",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  },
+  {
+    "color": "default",
+    "type": "pidgeotto",
+    "size": "large",
+    "name": "Pidgeotto",
+    "generation": "gen1",
+    "originalSpriteSize": 32
+  }
+]

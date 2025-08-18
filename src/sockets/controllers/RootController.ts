@@ -1,4 +1,13 @@
-import { SocketController, OnConnect, OnDisconnect, OnMessage, MessageBody, EmitOnSuccess, ConnectedSocket, SocketId } from 'socket-controllers';
+import {
+  SocketController,
+  OnConnect,
+  OnDisconnect,
+  OnMessage,
+  MessageBody,
+  EmitOnSuccess,
+  ConnectedSocket,
+  SocketId,
+} from 'socket-controllers';
 import winston from 'winston';
 import { Socket } from 'socket.io';
 import { Service } from 'typedi';

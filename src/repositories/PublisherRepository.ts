@@ -1,9 +1,9 @@
-import { Inject, Service } from "typedi";
-import { BaseOrmRepository } from "./BaseOrmRepository";
-import { Logger } from "@Decorators/Logger";
-import winston from "winston";
-import { DataSource, DeepPartial } from "typeorm";
-import { Publisher } from "databases/postgres/entities/Publisher";
+import { Inject, Service } from 'typedi';
+import { BaseOrmRepository } from './BaseOrmRepository';
+import { Logger } from '@Decorators/Logger';
+import winston from 'winston';
+import { DataSource, DeepPartial } from 'typeorm';
+import { Publisher } from 'databases/postgres/entities/Publisher';
 
 @Service()
 export class PublisherRepository extends BaseOrmRepository<Publisher> {
@@ -18,15 +18,15 @@ export class PublisherRepository extends BaseOrmRepository<Publisher> {
     return this.repo.save(Publisher);
   }
 
-  async getById(publisherId: number): Promise<Publisher | null> {
-    return this.repo.findOneBy({ publisherId: publisherId });
+  async getById(id: number): Promise<Publisher | null> {
+    return this.repo.findOneBy({ id });
   }
 
-  async search(filters: { publisherName?: string;}): Promise<Publisher[]> {
-    const query = this.repo.createQueryBuilder('Publisher');
+  async search(filters: { publisherName?: string }): Promise<Publisher[]> {
+    const query = this.repo.createQueryBuilder('publisher');
 
     if (filters.publisherName) {
-      query.andWhere('LOWER(Publisher.PublisherName) LIKE LOWER(:publisherName)', {
+      query.andWhere('LOWER(publisher.publisherName) LIKE LOWER(:publisherName)', {
         publisherName: `%${filters.publisherName}%`,
       });
     }
@@ -43,17 +43,4 @@ export class PublisherRepository extends BaseOrmRepository<Publisher> {
     await this.repo.delete(id);
   }
 
-  async isPublisherCodeExist(publisherCode: string): Promise<boolean> {
-    const found = await this.repo.findOneBy({ publisherCode: publisherCode });
-    return !!found;
-  }
-
-  async isPublisherCodeExistForOther(id: number, publisherCode: string): Promise<boolean> {
-    const found = await this.repo
-      .createQueryBuilder('Publisher')
-      .where('Publisher.PublisherCode = :publisherCode AND Publisher.PublisherId != :id', { publisherCode, id })
-      .getOne();
-
-    return !!found;
-  }
 }

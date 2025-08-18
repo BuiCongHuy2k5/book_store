@@ -1,5 +1,5 @@
 export class UpdateEmployeeInput {
-  employeeId: number;
+  id: number;
   employeeCode?: string;
   employeeName?: string;
   gender?: string;

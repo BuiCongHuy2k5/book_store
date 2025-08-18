@@ -1,21 +1,28 @@
-# 📚 Bookstore Management API
+📚 Bookstore Management API
 
 Hệ thống RESTful API hỗ trợ quản lý sách, tác giả, danh mục và nhà xuất bản. Được xây dựng với Node.js, TypeScript và TypeORM, hỗ trợ chuẩn hóa mã nguồn, dễ mở rộng và bảo trì.
 
-## 🚀 Công nghệ sử dụng
+🚀 Công nghệ sử dụng
 
-- **Node.js** + **TypeScript**
-- **Express** + **routing-controllers**
-- **TypeORM** (ORM cho SQL Server)
-- **SQL Server** (Hệ quản trị cơ sở dữ liệu)
-- **class-validator**, **class-transformer**
-- **typedi** (Dependency Injection)
-- **winston** (logging)
-- **ioredis** (cache Redis - optional)
+Node.js + TypeScript
 
-## 📂 Cấu trúc thư mục
+Express + routing-controllers
 
-## SRC/
+TypeORM (ORM cho SQL Server)
+
+SQL Server (Hệ quản trị cơ sở dữ liệu)
+
+class-validator, class-transformer
+
+typedi (Dependency Injection)
+
+winston (logging)
+
+ioredis (cache Redis - optional)
+
+📂 Cấu trúc thư mục
+
+SRC/
 │
 ├── controllers/ # REST Controllers
 ├── services/ # Business Logic
@@ -27,138 +34,146 @@ Hệ thống RESTful API hỗ trợ quản lý sách, tác giả, danh mục và
 ├── libs/ # Cấu hình app, logger, env, helper
 └── index.ts # Điểm khởi động ứng dụng
 
+✅ Chức năng API đã làm kèm validation và nghiệp vụ đặc biệt
 
-## 🧪 Chức năng API chính
+📘 Quản lý Sách (Book)
 
-### 📘 Sách (Book)
+GET /api/book — Lấy danh sách sách (có phân trang)
 
-- `GET /api/book` — Lấy danh sách sách
-- `GET /api/book/search?maSach=S001&tenSach=abc` — Tìm kiếm theo mã/tên
-- `GET /api/book/:id` — Lấy chi tiết sách
-- `POST /api/book` — Thêm sách mới
-- `PATCH /api/book/:id` — Cập nhật thông tin sách (partial)
-- `DELETE /api/book/:id` — Xóa sách (logic)
-- `PATCH /api/book/:id/inactivate` — Chuyển sách về trạng thái INACTIVE
-- `PATCH /api/book/:id/restore` — Kích hoạt lại (ACTIVE)
+GET /api/book/search?maSach=...&tenSach=... — Tìm kiếm theo mã hoặc tên sách
 
-### 👤 Tác giả (Author)
+GET /api/book/:id — Lấy chi tiết sách theo ID
 
-- `GET /api/authors` — Lấy danh sách tác giả
-- `GET /api/authors/search?maTacGia=TG001` — Tìm kiếm theo mã/tên
-- `GET /api/authors/:id` — Lấy chi tiết
-- `POST /api/authors` — Tạo mới
-- `PATCH /api/authors/:id` — Cập nhật thông tin
-- `DELETE /api/authors/:id` — Xóa
-- `PATCH /api/authors/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/authors/:id/restore` — Kích hoạt lại
+POST /api/book — Thêm sách mới
 
-### 🗂️ Danh mục (Category)
+⚠️ Kiểm tra trùng maSach
 
-- `GET /api/category` — Lấy danh sách danh mục
-- `GET /api/category/search?tenDM=Tiểu thuyết` — Tìm kiếm theo tên/mã
-- `GET /api/category/:id` — Lấy chi tiết
-- `POST /api/category` — Tạo mới
-- `PATCH /api/category/:id` — Cập nhật thông tin
-- `DELETE /api/category/:id` — Xóa
-- `PATCH /api/category/:id/inactivate` — Vô hiệu hóa
-- `PATCH /api/category/:id/restore` — Kích hoạt lại
+⚠️ Kiểm tra tồn tại danh mục/tác giả
 
-### 🏢 Nhà xuất bản (Publisher)
+PATCH /api/book/:id — Cập nhật thông tin sách (partial update)
 
-- `GET /api/Publisher` — Lấy danh sách
-- `GET /api/Publisher/search` — Tìm kiếm
-- `GET /api/Publisher/:id` — Lấy chi tiết
-- `POST /api/Publisher/` — Tạo mới
-- `PATCH /api/Publisher/:id` — Cập nhật
-- `DELETE /api/Publisher/:id` — Xóa
-- `PATCH /api/Publisher/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Publisher/:id/restore` — Kích hoạt lại
+✅ Chỉ cập nhật field được truyền vào
 
-### 🏢 TÀI KHOẢN (ACCOUNT)
+⚠️ Kiểm tra nếu cập nhật maSach trùng với mã đã tồn tại
 
-- `GET /api/Account` — Lấy danh sách
-- `GET /api/Account/search` — Tìm kiếm
-- `GET /api/Account/:id` — Lấy chi tiết
-- `POST /api/Account/` — Tạo mới
-- `PATCH /api/Account/:id` — Cập nhật
-- `DELETE /api/Account/:id` — Xóa
-- `PATCH /api/Account/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Account/:id/restore` — Kích hoạt lại
+DELETE /api/book/:id — Xóa logic (chuyển STATUS về INACTIVE)
 
-### 🏢 SÁCH CHI TIẾT (BOOK DETAILS)
+PATCH /api/book/:id/inactivate — Đổi trạng thái về INACTIVE
 
-- `GET /api/BookDetail` — Lấy danh sách
-- `GET /api/BookDetail/search` — Tìm kiếm
-- `GET /api/BookDetail/:id` — Lấy chi tiết
-- `POST /api/BookDetail/` — Tạo mới
-- `PATCH /api/BookDetail/:id` — Cập nhật
-- `DELETE /api/BookDetail/:id` — Xóa
-- `PATCH /api/SacBookDetailhCT/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/BookDetail/:id/restore` — Kích hoạt lại
+PATCH /api/book/:id/restore — Kích hoạt lại sách
 
-### 🏢 KHÁCH HÀNG (CUSTOMER)
+✅ Tính năng Tổng hợp giá trị nếu sách có nhiều bản giá/phiên bản
 
-- `GET /api/Customer` — Lấy danh sách
-- `GET /api/Customer/search` — Tìm kiếm
-- `GET /api/Customer/:id` — Lấy chi tiết
-- `POST /api/Customer/` — Tạo mới
-- `PATCH /api/Customer/:id` — Cập nhật
-- `DELETE /api/Customer/:id` — Xóa
-- `PATCH /api/Customer/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Customer/:id/restore` — Kích hoạt lại
+✅ Tính năng cảnh báo không tìm thấy nếu ID không tồn tại
 
-### 🏢 NHÂN VIÊN (EMPLOYEE)
+👤 Quản lý Tác giả (Author)
 
-- `GET /api/Employee` — Lấy danh sách
-- `GET /api/Employee/search` — Tìm kiếm
-- `GET /api/Employee/:id` — Lấy chi tiết
-- `POST /api/Employee/` — Tạo mới
-- `PATCH /api/Employee/:id` — Cập nhật
-- `DELETE /api/Employee/:id` — Xóa
-- `PATCH /api/Employee/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Employee/:id/restore` — Kích hoạt lại
+Các API tương tự Book
 
-### 🏢 ẢNH (IMAGE)
+Tìm kiếm theo maTacGia, tenTacGia
 
-- `GET /api/Image` — Lấy danh sách
-- `GET /api/Image/search` — Tìm kiếm
-- `GET /api/Image/:id` — Lấy chi tiết
-- `POST /api/Image/` — Tạo mới
-- `PATCH /api/Image/:id` — Cập nhật
-- `DELETE /api/Image/:id` — Xóa
-- `PATCH /api/Image/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Image/:id/restore` — Kích hoạt lại
+Check trùng mã khi tạo
 
-### 🏢 GIỎ HÀNG (CART)
+Cho phép cập nhật từng phần
 
-- `GET /api/Cart` — Lấy danh sách
-- `GET /api/Cart/search` — Tìm kiếm
-- `GET /api/Cart/:id` — Lấy chi tiết
-- `POST /api/Cart/` — Tạo mới
-- `PATCH /api/Cart/:id` — Cập nhật
-- `DELETE /api/Cart/:id` — Xóa
-- `PATCH /api/Cart/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Cart/:id/restore` — Kích hoạt lại
+🗂️ Quản lý Danh mục (Category)
 
-### 🏢 KHUYẾN MÃI (PROMOTION)
+Các API tương tự Author
 
-- `GET /api/Promotion` — Lấy danh sách
-- `GET /api/Promotion/search` — Tìm kiếm
-- `GET /api/Promotion/:id` — Lấy chi tiết
-- `POST /api/Promotion/` — Tạo mới
-- `PATCH /api/Promotion/:id` — Cập nhật
-- `DELETE /api/Promotion/:id` — Xóa
-- `PATCH /api/Promotion/:id/inactivate` — Ngưng hoạt động
-- `PATCH /api/Promotion/:id/restore` — Kích hoạt lại
+Search theo tên danh mục
 
-## ⚙️ Cài đặt & chạy dự án
+Cảnh báo trùng tên hoặc ID không tồn tại khi sửa
 
-```bash
+🏢 Quản lý Nhà xuất bản (Publisher)
+
+Các API tương tự Category
+
+Cho phép tìm kiếm, tạo mới, cập nhật, xóa mềm, khôi phục
+
+💻 Quản lý Tài khoản (Account)
+
+POST /api/Account — Đăng ký tài khoản mới
+
+⚠️ Check trùng email, username
+
+⚠️ Hash password bằng bcrypt
+
+PATCH /api/Account/:id — Đổi mật khẩu, cập nhật info
+
+✅ Kiểm tra password cũ trước khi đổi (nếu cần)
+
+GET /api/Account/search — Tìm kiếm theo email, role
+
+💆 Quản lý Khách hàng (Customer)
+
+POST /api/Customer — Thêm khách hàng mới
+
+✅ Kiểm tra trùng SĐT hoặc email
+
+Cho phép chỉnh sửa từng phần, xóa mềm, khôi phục
+
+🕴️ Quản lý Nhân viên (Employee)
+
+Các chức năng tương tự Customer
+
+Phân biệt ROLE = EMPLOYEE, phân quyền
+
+🛒 Quản lý Giỏ hàng (Cart)
+
+GET /api/Cart — Lấy toàn bộ giỏ hàng
+
+GET /api/Cart/:id — Lấy chi tiết từng giỏ
+
+POST /api/Cart — Tạo mới giỏ hàng
+
+✅ Tự tính totalAmount = price \* quantity
+
+⚠️ Kiểm tra trùng sách trong giỏ để cộng dồn hoặc báo lỗi
+
+PATCH /api/Cart/:id — Cập nhật số lượng hoặc giá
+
+✅ Tự động cập nhật lại totalAmount
+
+🧾 Hóa đơn (Invoice)
+
+Quản lý chi tiết từng đơn hàng
+
+Tính tổng tiền, trạng thái đơn hàng
+
+Cho phép cập nhật trạng thái đơn, PENDING / PAID
+
+📦 Quản lý tồn kho (Inventory)
+
+Thêm mới, cập nhật số lượng sách còn lại
+
+Cho phép tìm kiếm theo mã sách hoặc tên
+
+Cảnh báo tồn kho theo số lượng
+
+Thông báo Warning theo status LOW_STOCK/OVER_STOCK/IN_STOCK/OUT_OF_STOCK
+
+⚙️ Cài đặt & chạy dự án
+
 # Cài đặt package
-npm,yarn install
 
-# Tạo file .env
+npm install
+
+# Tạo file .env từ mẫu
+
 cp .env.example .env
 
-# Chạy ứng dụng
-yarn dev
+# Chạy ứng dụng ở dev mode
+
+npm run dev
+
+🎉 Ghi chú:
+
+Tất cả lỗi và cảnh báo đều chuẩn hóa qua middleware ErrorHandler
+
+Logger sử dụng Winston ghi lại toàn bộ lỗi quan trọng
+
+Mã nguồn đã tách riêng Controller-Service-Repository theo chuẩn Clean Architecture
+
+Tự động validate request thông qua class-validator
+
+Mỗi entity đều có enum STATUS: ACTIVE, INACTIVE, DELETED để hỗ trợ soft delete

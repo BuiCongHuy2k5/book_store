@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import  Redis  from 'ioredis';
+import Redis from 'ioredis';
 
 import { env } from '@Libs/env';
 import { verify } from '@Libs/jwt';
@@ -8,7 +8,7 @@ import { GraphqlReqCredentials } from '@Libs/types/GraphqlReqCredentials';
 
 const logger = WinstonLogger.create(module);
 
-export function authenticate(cache: Redis.Redis) {
+export function authenticate(cache: Redis) {
   return async (req: Request, res: Response, next: NextFunction) => {
     if (req?.body?.query?.trim?.().startsWith?.('query Introspection')) {
       (req as any).isIntrospection = true;
@@ -21,7 +21,7 @@ export function authenticate(cache: Redis.Redis) {
     try {
       const data: any = verify(token, env.graphqlJwt.publicKey);
       logger.info('authenticate:: Decoded token data: ', data);
-      const val = await cache.get((data.sub as string));
+      const val = await cache.get(data.sub as string);
       if (!val || val !== data['tokenType']) {
         logger.warn('authenticate:: invalid token: ', data.sub);
         return next();

@@ -5,5 +5,5 @@ import { GraphqlReqCredentials } from '@Libs/types/GraphqlReqCredentials';
 export interface GraphqlContext {
   req: Request;
   res: Response;
-  credentials?: GraphqlReqCredentials,
+  credentials?: GraphqlReqCredentials;
 }

@@ -18,45 +18,33 @@ import { UpdateCategoryResponse } from '@Rests/types/UpdateCategoryRespone';
 export class CategoryController {
   constructor(
     @Logger(module) private readonly logger: winston.Logger,
-    private readonly CateService: CategoryService
+    private readonly CateService: CategoryService,
   ) {}
 
   @Post('/')
-  async create(@Body() body: CreateCategoryRequest): Promise<CreateCategoryResponse> {
+  async create(@Body() body: CreateCategoryRequest) {
     const input: CreateCategoryInput = { ...body };
     const result = await this.CateService.CreateCate(input);
-    return plainToInstance(CreateCategoryResponse, result, {
-      excludeExtraneousValues: true
-    });
+    return result;
   }
 
   @Get('/search')
-  async search(@QueryParam('categoryName') categoryName?: string) {
-    const result = await this.CateService.search({ categoryName });
-    return result.map(dm =>
-      plainToInstance(CreateCategoryResponse, dm, { excludeExtraneousValues: true })
-    );
+  async search(@QueryParam('cateName') cateName?: string) {
+    const result = await this.CateService.search({ cateName });
+    return result;
   }
 
   @Get('/:id')
   async getById(@Params() params: { id: number }) {
     const result = await this.CateService.getById(params.id);
-    return plainToInstance(CreateCategoryResponse, result, {
-      excludeExtraneousValues: true
-    });
+    return result;
   }
 
-
   @Patch('/:id')
-  async partialUpdate(
-    @Params() params: { id: number },
-    @Body({ validate: true }) req: UpdateCategoryRequest
-  ) {
-    const input: UpdateCategoryInput = { CategoryId: params.id, ...req };
+  async partialUpdate(@Params() params: { id: number }, @Body({ validate: true }) req: UpdateCategoryRequest) {
+    const input: UpdateCategoryInput = { id: params.id, ...req };
     const cate = await this.CateService.partialUpdate(input);
-    return plainToInstance(UpdateCategoryResponse, cate, {
-      excludeExtraneousValues: true
-    });
+    return cate;
   }
 
   @Delete('/:id')
@@ -66,12 +54,11 @@ export class CategoryController {
 
   @Patch('/:id/inactive')
   inactivate(@Params() { id }: { id: number }) {
-  return this.CateService.inactivateCategory(id);
-}
+    return this.CateService.inactivateCategory(id);
+  }
 
   @Patch('/:id/restore')
   restore(@Params() { id }: { id: number }) {
-  return this.CateService.restore(id);
-  
+    return this.CateService.restore(id);
   }
 }

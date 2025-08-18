@@ -1,8 +1,8 @@
-import { IsNotEmpty, Length, IsNumber } from 'class-validator';
+import { IsNotEmpty, Length, IsNumber, IsString } from 'class-validator';
 
 export class CreateCartRequest {
   @IsNotEmpty()
-  @Length(1, 50)
+  @IsString()
   cartCode: string;
 
   @IsNotEmpty()
@@ -11,5 +11,17 @@ export class CreateCartRequest {
 
   @IsNotEmpty()
   @IsNumber()
+  bookId: number;
+
+  @IsNotEmpty()
+  @IsNumber()
   accountId: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  quantity: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  price: number;
 }

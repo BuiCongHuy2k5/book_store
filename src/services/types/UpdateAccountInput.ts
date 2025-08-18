@@ -1,7 +1,7 @@
 export class UpdateAccountInput {
-  accountId: number;
-  username?: string;
-  password?: string;
+  id: number;
+  userName?: string;
+  passWord?: string;
   role?: string;
   status?: string;
 }

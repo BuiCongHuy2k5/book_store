@@ -6,7 +6,6 @@ import DataLoader from 'dataloader';
 import { Logger } from '@Decorators/Logger';
 import { DLoader } from '@Decorators/DLoader';
 
-
 import { DemoService } from '@Services/DemoService';
 import { User } from 'databases/postgres/entities/User';
 
@@ -20,7 +19,8 @@ export class DemoResolver {
       key: '_id',
       method: 'findByIds',
       multiple: false,
-    }) private demoLoader: DataLoader<string, any, any>,
+    })
+    private demoLoader: DataLoader<string, any, any>,
   ) {}
 
   @Query(returns => String)

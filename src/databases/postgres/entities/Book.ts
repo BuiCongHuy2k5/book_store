@@ -1,39 +1,48 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToOne,
-  JoinColumn,
-  RelationId
-} from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Category } from './Category';
 import { Author } from './Author';
+import { Type } from 'class-transformer';
+import { IsObject, ValidateNested } from 'class-validator';
+import { Publisher } from './Publisher';
 
-@Entity({ name: 'Book' })
+@Entity({ name: 'book' })
 export class Book {
-  @PrimaryGeneratedColumn({name: 'BookId'})
-  bookId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ length: 50, name: 'BookCode' })
+  @Column({unique: true})
   bookCode: string;
 
-  @Column({ length: 100, name: 'BookName' })
+  @Column()
   bookName: string;
 
-  @ManyToOne(() => Category)
-  @JoinColumn({ name: 'CategoryId' })
+  @ManyToOne(() => Category, category => category.id, { onDelete: 'SET NULL', nullable: true })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Category)
   category: Category;
 
-  @RelationId((book: Book) => book.category)
-  categoryId: number;
-
-  @ManyToOne(() => Author)
-  @JoinColumn({ name: 'AuthorId' })
+  @ManyToOne(() => Author, author => author.id, { onDelete: 'SET NULL', nullable: true })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Author)
   author: Author;
 
-  @RelationId((book: Book) => book.author)
-  authorId: number;
+  @ManyToOne(() => Publisher, publisher => publisher.id, { onDelete: 'SET NULL', nullable: true })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Publisher)
+  publisher: Publisher;
 
-  @Column({ length: 20, name: 'Status' })
+  @Column()
   status: string;
+
+  @Column({ nullable: true, default: null })
+  imageurl: string;
+
+  @CreateDateColumn({ name: 'CreatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable:true})
+  createdAt: Date;
+  
+  @UpdateDateColumn({ name: 'UpdatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable:true })
+  updatedAt: Date;
 }

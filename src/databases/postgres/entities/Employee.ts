@@ -1,36 +1,46 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, RelationId } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, RelationId, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 import { Account } from './Account';
+import { IsObject, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
 
-@Entity({ name: 'Employee' })
+@Entity({ name: 'employee' })
 export class Employee {
-  @PrimaryGeneratedColumn({name: "EmployeeId"})
-  employeeId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ length: 50, name: "EmployeeCode" })
+  @Column({unique: true})
   employeeCode: string;
 
-  @Column({ length: 100, name: "EmployeeName" })
+  @Column()
   employeeName: string;
 
-  @Column({ length: 10, name: "Gender" })
+  @Column()
   gender: string;
 
-  @Column({ type: 'date', name: "BirthDate" })
+  @Column()
   birthDate: Date;
 
-  @Column({ length: 11, name: "Phone" })
+  @Column()
   phone: string;
 
-  @Column({ length: 255, name: "Address" })
+  @Column()
   address: string;
 
-  @ManyToOne(() => Account)
-  @JoinColumn({ name: 'AccountId' })
+  @ManyToOne(() => Account, account => account.id, { onDelete: 'SET NULL', nullable: true })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Account)
   account: Account;
 
   @RelationId((employee: Employee) => employee.account)
   accountId: number;
 
-  @Column({ length: 20, name: "Status" })
+  @Column({ length: 20, name: 'Status' })
   status: string;
+
+  @CreateDateColumn({ name: 'CreatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true })
+    createdAt: Date;
+  
+  @UpdateDateColumn({ name: 'UpdatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  updatedAt: Date;
 }

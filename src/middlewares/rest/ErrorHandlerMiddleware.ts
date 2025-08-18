@@ -20,7 +20,7 @@ export class ErrorHandlerMiddleware implements ExpressErrorMiddlewareInterface {
         constraints: err.constraints,
       }));
 
-       res.status(400).json({
+      res.status(400).json({
         success: false,
         statusCode: 400,
         message: 'Validation failed',

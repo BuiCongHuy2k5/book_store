@@ -4,7 +4,7 @@ import {
   MiddlewareInterface,
   NextFn,
   ResolverData,
-  UnauthorizedError
+  UnauthorizedError,
 } from 'type-graphql';
 import winston from 'winston';
 import { Response } from 'express';
@@ -31,7 +31,7 @@ export class ErrorHandlerMiddleware implements MiddlewareInterface<GraphqlContex
 
       // Handle Validation Error
       if (error instanceof ArgumentValidationError) {
-        const errors = error.validationErrors.map((e) => ({
+        const errors = error.validationErrors.map(e => ({
           field: e.property,
           constraints: e.constraints,
         }));

@@ -15,9 +15,13 @@ export class CreateInvoiceRequest {
 
   @IsNotEmpty()
   @IsNumber()
-  totalAmount: number;
+  price: number;
 
   @IsNotEmpty()
-  @IsString()
-  bookName: string;
+  @IsNumber()
+  quantity: number;
+
+  @IsNotEmpty()
+  @IsNumber()
+  bookId: number;
 }

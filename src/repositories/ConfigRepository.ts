@@ -18,9 +18,13 @@ export class ConfigRepository {
   }
 
   async upsert(key: string, value: string) {
-    return ConfigModel.findOneAndUpdate({ key }, {
-      $set: { value },
-      $setOnInsert: { key },
-    }, { new: true, upsert: true });
+    return ConfigModel.findOneAndUpdate(
+      { key },
+      {
+        $set: { value },
+        $setOnInsert: { key },
+      },
+      { new: true, upsert: true },
+    );
   }
 }

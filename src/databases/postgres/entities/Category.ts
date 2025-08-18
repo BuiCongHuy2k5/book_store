@@ -1,13 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'Category' })
+@Entity({ name: 'category' })
 export class Category {
-  @PrimaryGeneratedColumn({ name: 'CategoryId' })
-  categoryId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ type: 'varchar', length: 100, name: 'CategoryName' },)
-  categoryName: string;
+  @Column({unique: true})
+  cateCode: string;
 
-  @Column({ type: 'varchar', length: 20, name: 'Status' })
+  @Column()
+  cateName: string;
+
+  @Column()
   status: string;
+
+  @CreateDateColumn({ name: 'CreatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP',nullable:true })
+  createdAt: Date;
+  
+  @UpdateDateColumn({ name: 'UpdatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  updatedAt: Date;
 }

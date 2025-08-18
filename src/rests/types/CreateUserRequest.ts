@@ -1,5 +1,5 @@
-import { RestRoles } from "@Enums/RestRoles";
-import { IsDateString, IsEmail, IsEnum, IsOptional, IsPhoneNumber, IsString, Matches } from "class-validator";
+import { RestRoles } from '@Enums/RestRoles';
+import { IsDateString, IsEmail, IsEnum, IsOptional, IsPhoneNumber, IsString, Matches } from 'class-validator';
 
 export class CreateUserRequest {
   @IsString()

@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsNumber, IsObject, IsOptional, IsString, ValidateNested } from 'class-validator';
 
 export class UpdateBookRequest {
   @IsOptional()
@@ -10,13 +10,17 @@ export class UpdateBookRequest {
   bookName?: string;
 
   @IsOptional()
-  @IsNumber()
-  categoryId?: number;
+  @IsString()
+  cateName: string;
 
   @IsOptional()
-  @IsNumber()
-  authorId?: number;
+  @IsString()
+  publisherName: string;
 
   @IsOptional()
   status?: string;
+
+  @IsOptional()
+  @IsString()
+  imageurl: string;
 }

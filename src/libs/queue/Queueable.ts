@@ -1,6 +1,6 @@
 import apm from 'elastic-apm-node';
 import Bull, { Job, JobOptions, Queue } from 'bull';
-import  Redis  from 'ioredis';
+import Redis from 'ioredis';
 import { isString } from 'lodash';
 import Container from 'typedi';
 import winston from 'winston';
@@ -11,7 +11,7 @@ export default abstract class Queueable<T> {
   private readonly queueInstance: Queue; //queue instance
   protected logger: winston.Logger;
 
-  constructor(logger: winston.Logger, redis: Redis.Redis) {
+  constructor(logger: winston.Logger, redis: Redis) {
     this.queueInstance = new Bull(this.queueName(), {
       prefix: `{${this.queueName()}}`,
       defaultJobOptions: { attempts: 20, backoff: 10000 },

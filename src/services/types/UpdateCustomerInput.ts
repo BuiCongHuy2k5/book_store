@@ -1,11 +1,10 @@
 export class UpdateCustomerInput {
-  customerId: number;
+  id: number;
   customerCode?: string;
   customerName?: string;
   gender?: string;
   phone?: string;
   email?: string;
   address?: string;
-  accountId?: number;
   status?: string;
 }

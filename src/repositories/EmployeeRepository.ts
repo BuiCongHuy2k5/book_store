@@ -1,10 +1,9 @@
-import { Inject, Service } from "typedi";
-import { BaseOrmRepository } from "./BaseOrmRepository";
-import { Logger } from "@Decorators/Logger";
-import winston from "winston";
-import { DataSource, DeepPartial } from "typeorm";
-import { Employee } from "databases/postgres/entities/Employee";
-
+import { Inject, Service } from 'typedi';
+import { BaseOrmRepository } from './BaseOrmRepository';
+import { Logger } from '@Decorators/Logger';
+import winston from 'winston';
+import { DataSource, DeepPartial } from 'typeorm';
+import { Employee } from 'databases/postgres/entities/Employee';
 
 @Service()
 export class EmployeeRepository extends BaseOrmRepository<Employee> {
@@ -19,20 +18,24 @@ export class EmployeeRepository extends BaseOrmRepository<Employee> {
     return this.repo.save(employee);
   }
 
-  async getById(employeeId: number): Promise<Employee | null> {
-    return this.repo.findOneBy({ employeeId: employeeId });
+  async getById(id: number): Promise<Employee | null> {
+    return this.repo
+      .createQueryBuilder('employee')
+      .leftJoinAndSelect('employee.account', 'account')
+      .where('employee.id = :id', { id })
+      .getOne();
   }
 
-  async search(filters: { employeeName?: string; phone?: string}): Promise<Employee[]> {
-   const query = this.repo.createQueryBuilder('Employee');
+  async search(filters: { employeeName?: string; phone?: string }): Promise<Employee[]> {
+    const query = this.repo.createQueryBuilder('employee').leftJoinAndSelect('employee.account', 'account');
 
     if (filters.employeeName) {
-      query.andWhere('LOWER(Employee.EmployeeName) LIKE LOWER(:employeeName)', {
+      query.andWhere('LOWER(employee.employeeName) LIKE LOWER(:employeeName)', {
         employeeName: `%${filters.employeeName}%`,
       });
     }
     if (filters.phone) {
-      query.andWhere('LOWER(Employee.Phone) LIKE LOWER(:phone)', {
+      query.andWhere('LOWER(employee.Phone) LIKE LOWER(:phone)', {
         phone: `%${filters.phone}%`,
       });
     }
@@ -49,20 +52,20 @@ export class EmployeeRepository extends BaseOrmRepository<Employee> {
     await this.repo.delete(id);
   }
 
-  async isEmailOrPhoneExist( phone: string): Promise<boolean> {
+  async isEmailOrPhoneExist(phone: string): Promise<boolean> {
     const existingEmployee = await this.repo
-      .createQueryBuilder('Employee')
-      .where('Employee.Phone = :phone', { phone })
+      .createQueryBuilder('employee')
+      .where('employee.Phone = :phone', { phone })
       .getOne();
     return !!existingEmployee;
   }
-  
-  async isEmailOrPhoneExistForOtherEmployee(employeeId: number, phone: string): Promise<boolean> {
+
+  async isEmailOrPhoneExistForOtherEmployee(id: number, phone: string): Promise<boolean> {
     const existingEmployee = await this.repo
-      .createQueryBuilder('Employee')
-      .where('(Employee.Phone = :phone) AND Employee.EmployeeId != :employeeId', {
+      .createQueryBuilder('employee')
+      .where('(employee.Phone = :phone) AND employee.id != :id', {
         phone,
-        employeeId,
+        id,
       })
       .getOne();
     return !!existingEmployee;

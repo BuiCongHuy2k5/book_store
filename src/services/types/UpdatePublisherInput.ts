@@ -1,6 +1,7 @@
 export class UpdatePublisherInput {
-  publisherId: number;
+  id: number;
   publisherCode?: string;
   publisherName?: string;
   status?: string;
+  Adress?: string;
 }

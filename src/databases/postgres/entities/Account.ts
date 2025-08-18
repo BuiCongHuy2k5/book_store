@@ -1,19 +1,27 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { UserRole } from '@Enums/RestRoles';
+import { IsEnum } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'Account' })
+@Entity()
 export class Account {
-  @PrimaryGeneratedColumn({ name: "AccountId" })
-  accountId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ length: 100, name: "Username" })
-  username: string;
+  @Column()
+  userName: string;
 
-  @Column({ length: 100, name: "Password" })
-  password: string;
+  @Column()
+  passWord: string;
 
-  @Column({ length: 50, name: "Role" })
-  role: string;
+  @Column()
+  role: UserRole;
 
-  @Column({ length: 20, name: "Status" })
+  @Column()
   status: string;
+
+  @CreateDateColumn({ name: 'CreatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true })
+    createdAt: Date;
+  
+  @UpdateDateColumn({ name: 'UpdatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true})
+  updatedAt: Date;
 }

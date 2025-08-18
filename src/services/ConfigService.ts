@@ -1,4 +1,4 @@
-import  Redis  from 'ioredis';
+import Redis from 'ioredis';
 import { Inject, Service } from 'typedi';
 import winston from 'winston';
 
@@ -14,9 +14,9 @@ import { ConfigRepository } from '@Repositories/ConfigRepository';
 export class ConfigService {
   constructor(
     @Logger(module) private readonly logger: winston.Logger,
-    @Inject('cache') private readonly cache: Redis.Redis,
+    @Inject('cache') private readonly cache: Redis,
     private readonly configRepo: ConfigRepository,
-  ) {}
+  ) { }
 
   /**
    * get the config as a string
@@ -65,7 +65,12 @@ export class ConfigService {
           values.map(v => {
             results[keysNotFound[v.key]] = v.value;
             if (v.value) {
-              return ['setex', `{${hashTag}}${v.key}`, (env.redis.defaultExpirationTimeInSeconds || 300).toString(), v.value];
+              return [
+                'setex',
+                `{${hashTag}}${v.key}`,
+                (env.redis.defaultExpirationTimeInSeconds || 300).toString(),
+                v.value,
+              ];
             }
           }),
         )

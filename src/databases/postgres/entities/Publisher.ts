@@ -1,16 +1,25 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-@Entity({ name: 'Publisher' })
+@Entity({ name: 'publisher' })
 export class Publisher {
-  @PrimaryGeneratedColumn({name: 'PublisherId'})
-  publisherId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ length: 50, name: 'PublisherCode' })
+  @Column({unique: true})
   publisherCode: string;
 
-  @Column({ length: 100, name: 'PublisherName' })
+  @Column()
   publisherName: string;
 
-  @Column({ length: 20, name: 'Status' })
+  @Column()
   status: string;
+
+  @Column()
+  Adress: string;
+
+  @CreateDateColumn({ name: 'CreatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable:true })
+    createdAt: Date;
+  
+  @UpdateDateColumn({ name: 'UpdatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', nullable: true })
+  updatedAt: Date;
 }

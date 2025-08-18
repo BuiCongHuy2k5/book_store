@@ -1,13 +1,4 @@
-import {
-  Body,
-  Delete,
-  Get,
-  JsonController,
-  Params,
-  Patch,
-  Post,
-  QueryParam,
-} from 'routing-controllers';
+import { Body, Delete, Get, JsonController, Params, Patch, Post, QueryParam } from 'routing-controllers';
 import { OpenAPI } from 'routing-controllers-openapi';
 import { Service } from 'typedi';
 import winston from 'winston';
@@ -33,42 +24,27 @@ export class AuthorController {
   async create(@Body() body: CreateAuthorRequest): Promise<CreateAuthorResponse> {
     const input: CreateAuthorInput = { ...body };
     const author = await this.authorService.createAuthor(input);
-    return plainToInstance(CreateAuthorResponse, author, {
-      excludeExtraneousValues: true,
-    });
+    return author;
   }
-  
- @Get('/search')
-  async search(
-    @QueryParam('authorCode') authorCode?: string,
-    @QueryParam('authorName') authorName?: string,
-  ) {
+
+  @Get('/search')
+  async search(@QueryParam('authorCode') authorCode?: string,
+               @QueryParam('authorName') authorName?: string) {
     const results = await this.authorService.search({ authorCode, authorName });
-    return results.map((map) =>
-      plainToInstance(CreateAuthorResponse, map, {
-        excludeExtraneousValues: true,
-      }),
-    );
+    return results;
   }
 
   @Get('/:id')
   async getById(@Params() params: { id: number }) {
     const author = await this.authorService.getById(params.id);
-    return plainToInstance(CreateAuthorResponse, author, {
-      excludeExtraneousValues: true,
-    });
+    return author;
   }
 
   @Patch('/:id')
-  async partialUpdate(
-    @Params() params: { id: number },
-    @Body({ validate: true }) req: UpdateAuthorRequest,
-  ) {
-    const input: UpdateAuthorInput = { authorId: params.id, ...req };
+  async partialUpdate(@Params() params: { id: number }, @Body({ validate: true }) req: UpdateAuthorRequest) {
+    const input: UpdateAuthorInput = { id: params.id, ...req };
     const author = await this.authorService.partialUpdate(input);
-    return plainToInstance(CreateAuthorResponse, author, {
-      excludeExtraneousValues: true,
-    });
+    return author;
   }
 
   @Delete('/:id')
@@ -78,12 +54,11 @@ export class AuthorController {
 
   @Patch('/:id/inactive')
   inactivate(@Params() { id }: { id: number }) {
-  return this.authorService.inactivateAuthor(id);
-}
+    return this.authorService.inactivateAuthor(id);
+  }
 
   @Patch('/:id/restore')
   restore(@Params() { id }: { id: number }) {
-  return this.authorService.restore(id);
+    return this.authorService.restore(id);
   }
-  
 }

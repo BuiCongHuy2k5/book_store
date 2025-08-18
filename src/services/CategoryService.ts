@@ -15,27 +15,28 @@ import { UpdateCategoryInput } from './types/UpdateCategoryInput';
 export class CategoryService {
   constructor(
     @Logger(module) private readonly logger: winston.Logger,
-    @Inject('cache') private readonly cache: Redis.Redis,
-    private readonly cateRepo: CategoryRepository
-  ) {}
+    @Inject('cache') private readonly cache: Redis,
+    private readonly cateRepo: CategoryRepository,
+  ) { }
 
   async CreateCate(input: CreateCategoryInput): Promise<Category> {
     const cateGory = new Category();
-    cateGory.categoryName = input.categoryName;
+    cateGory.cateName = input.cateName;
+    cateGory.cateCode = input.cateCode;
     cateGory.status = RestRoles.ACTIVE;
 
     return this.cateRepo.create(cateGory);
   }
 
-  async getById(categoryId: number): Promise<Category> {
-    const cate = await this.cateRepo.getById(categoryId);
+  async getById(id: number): Promise<Category> {
+    const cate = await this.cateRepo.getById(id);
     if (!cate) {
-      throw new NotFoundError(`DANH MUC NOT FOUND ID: ${categoryId}`);
+      throw new NotFoundError(`CATEGORY NOT FOUND ID: ${id}`);
     }
     return cate;
   }
 
-  async search(filters: { categoryName?: string }): Promise<Category[]> {
+  async search(filters: { cateName?: string }): Promise<Category[]> {
     const results = await this.cateRepo.search(filters);
     if (results.length === 0) {
       throw new NotFoundError(`NO CATEGORIES FOUND MATCHING FILTERS`);
@@ -43,51 +44,50 @@ export class CategoryService {
     return results;
   }
 
-  async partialUpdate(input: UpdateCategoryInput): Promise<Category> {
-      const cate = await this.cateRepo.getById(input.CategoryId);
-      if (!cate) {
-        throw new NotFoundError(`CATEGORY NOT FOUND`);
-      }
-    
-      const { CategoryId, ...updateData } = input;
-    
-      return this.cateRepo.partialUpdate(CategoryId, updateData as DeepPartial<Category>);
-    }
-
-  async delete(categoryId: number): Promise<{ message: string }> {
-    const cate = await this.cateRepo.getById(categoryId);
+  async partialUpdate(input: UpdateCategoryInput): Promise<Category | null> {
+    const cate = await this.cateRepo.getById(input.id);
     if (!cate) {
-      throw new NotFoundError(`CATEGORY NOT FOUND ID: ${categoryId}`);
+      throw new NotFoundError(`CATEGORY NOT FOUND`);
     }
 
-    await this.cateRepo.delete(categoryId);
-    return { message: `DELETE CATEGORY ID: ${categoryId}` };
+    const { id, ...updateData } = input;
+
+    return this.cateRepo.partialUpdate(id, updateData as DeepPartial<Category>);
   }
-  
+
+  async delete(id: number): Promise<{ message: string }> {
+    const cate = await this.cateRepo.getById(id);
+    if (!cate) {
+      throw new NotFoundError(`CATEGORY NOT FOUND ID: ${id}`);
+    }
+
+    await this.cateRepo.delete(id);
+    return { message: `DELETE CATEGORY ID: ${id}` };
+  }
+
   async inactivateCategory(id: number): Promise<{ message: string }> {
     const cate = await this.cateRepo.getById(id);
     if (!cate) {
       throw new NotFoundError(`CATEGORY NOT FOUND ID: ${id}`);
     }
-  
+
     await this.cateRepo.partialUpdate(id, { status: RestRoles.INACTIVE });
-  
+
     return { message: `CHANGE ID STATUS SUCCESSFULLY ${id}` };
-    }
-  
-    async restore(id: number): Promise<{message: string}> {
+  }
+
+  async restore(id: number): Promise<{ message: string }> {
     const cate = await this.cateRepo.getById(id);
     if (!cate) {
       throw new NotFoundError(`CATEGORY NOT FOUND ID: ${id}`);
     }
-  
+
     if (cate.status === RestRoles.ACTIVE) {
       return { message: `CATEGORY ID ${id} IS ALREADY ACTIVE` };
     }
-  
+
     await this.cateRepo.partialUpdate(id, { status: RestRoles.ACTIVE });
-  
+
     return { message: `CHANGE ID STATUS SUCCESSFULLY ${id}` };
   }
-  
 }

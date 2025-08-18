@@ -8,7 +8,7 @@ import { Logger } from '@Decorators/Logger';
 
 import { WinstonLogger } from '@Libs/WinstonLogger';
 
-import { RestRoles, Role } from '@Enums/RestRoles';
+import { RestRoles, UserRole } from '@Enums/RestRoles';
 import { LogLevel } from '@Enums/LogLevel';
 
 import { ErrorCode } from '@Errors/ErrorCode';
@@ -28,22 +28,20 @@ export class ConfigController {
     private configService: ConfigService,
   ) {}
 
-  @Authorized(Role.ADMIN)
+  @Authorized(UserRole.ADMIN)
   @Post('/expire')
   public async expire(@QueryParam('prefix') prefix: string) {
     return await this.configService.expireConfigs(prefix);
   }
 
-  @Authorized(Role.ADMIN)
+  @Authorized(UserRole.ADMIN)
   @Get('/keys')
   public async keys(@QueryParam('prefix') prefix: string) {
     return await this.configService.keys(prefix);
   }
 
   @Patch('/log-level')
-  public async changeLogLevel(
-    @QueryParams() params: ChangeLogLevelReq,
-  ) {
+  public async changeLogLevel(@QueryParams() params: ChangeLogLevelReq) {
     this.logger.info('changeLogLevel:: changing log level to: ', params.level);
     WinstonLogger.changeLogLevel(params.level);
     return 'OK';

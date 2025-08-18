@@ -1,36 +1,63 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn, RelationId, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+  RelationId,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { Customer } from './Customer';
 import { Account } from './Account';
+import { IsObject, ValidateNested } from 'class-validator';
+import { Type } from 'class-transformer';
+import { Book } from './Book';
 
-@Entity({ name: 'Cart' })
+@Entity({ name: 'cart' })
 export class Cart {
-  @PrimaryGeneratedColumn({ name: 'CartId' })
-  cartId: number;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-  @Column({ length: 50, name: 'CartCode' })
+  @Column({unique: true})
   cartCode: string;
 
-  @ManyToOne(() => Customer)
-  @JoinColumn({ name: 'CustomerId' })
+  @ManyToOne(() => Customer, customer => customer.id, { onDelete: 'SET NULL', nullable: true })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Customer)
   customer: Customer;
 
-  @RelationId((cart: Cart) => cart.customer)
-  customerId: number;
-
-  @Column({ length: 20, name: 'Status' })
+  @Column()
   status: string;
 
   @CreateDateColumn({ name: 'CreatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-createdAt: Date;
+  createdAt: Date;
 
-@UpdateDateColumn({ name: 'UpdatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
-updatedAt: Date;
+  @UpdateDateColumn({ name: 'UpdatedAt', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 
-
-  @ManyToOne(() => Account)
-  @JoinColumn({ name: 'AccountId' })
+  @ManyToOne(() => Account, account => account.id, { onDelete: 'SET NULL', nullable: true })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Account)
   account: Account;
 
   @RelationId((cart: Cart) => cart.account)
   accountId: number;
+
+  @ManyToOne(() => Book, book => book.id, { onDelete: 'SET NULL', nullable: true })
+  @IsObject()
+  @ValidateNested()
+  @Type(() => Book)
+  book: Book;
+
+  @Column()
+  quantity: number;
+
+  @Column()
+  price: number;
+
+  @Column({ type: 'decimal' })
+  totalAmount: number;
 }

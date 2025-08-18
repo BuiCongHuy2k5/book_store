@@ -1,8 +1,10 @@
 export class UpdateBookInput {
-  bookId: number;
+  id: number;
   bookCode?: string;
   bookName?: string;
-  categoryId?: number;
+  cateId?: number;
   authorId?: number;
+  publisherId?: number;
   status?: string;
+  imageurl?: string;
 }
