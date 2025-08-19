@@ -28,5 +28,3 @@ EXPOSE 3001
 
 # Run app
 CMD ["yarn", "dev"]
-
--
