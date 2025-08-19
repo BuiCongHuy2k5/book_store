@@ -24,7 +24,7 @@ COPY package.json yarn.lock ./
 RUN yarn install --production
 
 # Expose port
-EXPOSE 3001
+EXPOSE 3000
 
 # Run app
 CMD ["yarn", "dev"]
