@@ -1,3 +1,4 @@
+README.md
 📚 Bookstore Management API
 
 Hệ thống RESTful API hỗ trợ quản lý sách, tác giả, danh mục và nhà xuất bản. Được xây dựng với Node.js, TypeScript và TypeORM, hỗ trợ chuẩn hóa mã nguồn, dễ mở rộng và bảo trì.
