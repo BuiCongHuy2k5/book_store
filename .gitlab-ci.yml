@@ -45,7 +45,7 @@ run:
     NODE_ENV: production
     SERVER_TYPE: producer
     SERVICE_NAME: be-starterr
-
+    
     # PostgreSQL (theo .env bạn cung cấp)
     DB_TYPE: postgres
     DB_HOST: postgres
