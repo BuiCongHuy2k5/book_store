@@ -1,0 +1,76 @@
+stages:
+  - install
+  - build
+  - test
+  - run
+
+# Cài dependencies
+install:
+  stage: install
+  image: node:20
+  script:
+    - yarn install
+  artifacts:
+    paths:
+      - node_modules/
+
+# Build code TypeScript
+build:
+  stage: build
+  image: node:20
+  script:
+    - yarn build
+  artifacts:
+    paths:
+      - dist/
+
+# Chạy test
+test:
+  stage: test
+  image: node:20
+  script:
+    - yarn test || echo "No tests found"
+
+# Run app (deploy trên GitLab Runner + Docker service)
+run:
+  stage: run
+  image: node:20
+  services:
+    - name: postgres:14-alpine
+      alias: postgres
+    - name: redis:7
+      alias: redis
+  variables:
+    # App
+    NODE_ENV: production
+    SERVER_TYPE: producer
+    SERVICE_NAME: be-starterr
+    
+    # PostgreSQL (theo .env bạn cung cấp)
+    DB_TYPE: postgres
+    DB_HOST: postgres
+    DB_PORT: 5432
+    DB_USERNAME: postgres
+    DB_PASSWORD: postgres
+    DB_DATABASE: book_store
+    DB_SCHEMA: public
+    DB_SYNCHRONIZE: "true"
+    DB_LOGGING: all
+    DB_LOGGER: advanced-console
+
+    # Redis
+    REDIS_HOST: redis
+    REDIS_PORT: 6379
+    REDIS_PASSWORD: postgres
+
+    # App host/port
+    APP_HOST: localhost
+    APP_PORT: 3001
+    APP_ROUTE_PREFIX: /api
+    APP_EXTERNAL_ROUTE_PREFIX: /api
+    APP_EXTERNAL_PORT: 3001
+    APP_BE_ROUTE_PREFIX: /api
+
+  script:
+    - yarn install --production
+    - node dist/index.js

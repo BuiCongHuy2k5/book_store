@@ -1,93 +1,180 @@
-# QLBanSach
+README.md
+📚 Bookstore Management API
 
+Hệ thống RESTful API hỗ trợ quản lý sách, tác giả, danh mục và nhà xuất bản. Được xây dựng với Node.js, TypeScript và TypeORM, hỗ trợ chuẩn hóa mã nguồn, dễ mở rộng và bảo trì.
 
+🚀 Công nghệ sử dụng
 
-## Getting started
+Node.js + TypeScript
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Express + routing-controllers
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+TypeORM (ORM cho SQL Server)
 
-## Add your files
+SQL Server (Hệ quản trị cơ sở dữ liệu)
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/topics/git/add_files/#add-files-to-a-git-repository) or push an existing Git repository with the following command:
+class-validator, class-transformer
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/BuiCongHuy2k5/qlbansach.git
-git branch -M main
-git push -uf origin main
-```
+typedi (Dependency Injection)
 
-## Integrate with your tools
+winston (logging)
 
-- [ ] [Set up project integrations](https://gitlab.com/BuiCongHuy2k5/qlbansach/-/settings/integrations)
+ioredis (cache Redis - optional)
 
-## Collaborate with your team
+📂 Cấu trúc thư mục
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/user/project/merge_requests/auto_merge/)
+SRC/
+│
+├── controllers/ # REST Controllers
+├── services/ # Business Logic
+├── repositories/ # Giao tiếp DB (TypeORM)
+├── entities/ # Entity TypeORM (SQL Server)
+├── types/ # DTOs (Request / Response / Input)
+├── enums/ # Enum dùng chung (vd: RestRoles)
+├── middlewares/ # Các middleware chung
+├── libs/ # Cấu hình app, logger, env, helper
+└── index.ts # Điểm khởi động ứng dụng
 
-## Test and Deploy
+✅ Chức năng API đã làm kèm validation và nghiệp vụ đặc biệt
 
-Use the built-in continuous integration in GitLab.
+📘 Quản lý Sách (Book)
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+GET /api/book — Lấy danh sách sách (có phân trang)
 
-***
+GET /api/book/search?maSach=...&tenSach=... — Tìm kiếm theo mã hoặc tên sách
 
-# Editing this README
+GET /api/book/:id — Lấy chi tiết sách theo ID
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
+POST /api/book — Thêm sách mới
 
-## Suggestions for a good README
+⚠️ Kiểm tra trùng maSach
 
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+⚠️ Kiểm tra tồn tại danh mục/tác giả
 
-## Name
-Choose a self-explaining name for your project.
+PATCH /api/book/:id — Cập nhật thông tin sách (partial update)
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+✅ Chỉ cập nhật field được truyền vào
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+⚠️ Kiểm tra nếu cập nhật maSach trùng với mã đã tồn tại
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+DELETE /api/book/:id — Xóa logic (chuyển STATUS về INACTIVE)
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+PATCH /api/book/:id/inactivate — Đổi trạng thái về INACTIVE
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+PATCH /api/book/:id/restore — Kích hoạt lại sách
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+✅ Tính năng Tổng hợp giá trị nếu sách có nhiều bản giá/phiên bản
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+✅ Tính năng cảnh báo không tìm thấy nếu ID không tồn tại
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+👤 Quản lý Tác giả (Author)
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Các API tương tự Book
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Tìm kiếm theo maTacGia, tenTacGia
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Check trùng mã khi tạo
 
-## License
-For open source projects, say how it is licensed.
+Cho phép cập nhật từng phần
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+🗂️ Quản lý Danh mục (Category)
+
+Các API tương tự Author
+
+Search theo tên danh mục
+
+Cảnh báo trùng tên hoặc ID không tồn tại khi sửa
+
+🏢 Quản lý Nhà xuất bản (Publisher)
+
+Các API tương tự Category
+
+Cho phép tìm kiếm, tạo mới, cập nhật, xóa mềm, khôi phục
+
+💻 Quản lý Tài khoản (Account)
+
+POST /api/Account — Đăng ký tài khoản mới
+
+⚠️ Check trùng email, username
+
+⚠️ Hash password bằng bcrypt
+
+PATCH /api/Account/:id — Đổi mật khẩu, cập nhật info
+
+✅ Kiểm tra password cũ trước khi đổi (nếu cần)
+
+GET /api/Account/search — Tìm kiếm theo email, role
+
+💆 Quản lý Khách hàng (Customer)
+
+POST /api/Customer — Thêm khách hàng mới
+
+✅ Kiểm tra trùng SĐT hoặc email
+
+Cho phép chỉnh sửa từng phần, xóa mềm, khôi phục
+
+🕴️ Quản lý Nhân viên (Employee)
+
+Các chức năng tương tự Customer
+
+Phân biệt ROLE = EMPLOYEE, phân quyền
+
+🛒 Quản lý Giỏ hàng (Cart)
+
+GET /api/Cart — Lấy toàn bộ giỏ hàng
+
+GET /api/Cart/:id — Lấy chi tiết từng giỏ
+
+POST /api/Cart — Tạo mới giỏ hàng
+
+✅ Tự tính totalAmount = price \* quantity
+
+⚠️ Kiểm tra trùng sách trong giỏ để cộng dồn hoặc báo lỗi
+
+PATCH /api/Cart/:id — Cập nhật số lượng hoặc giá
+
+✅ Tự động cập nhật lại totalAmount
+
+🧾 Hóa đơn (Invoice)
+
+Quản lý chi tiết từng đơn hàng
+
+Tính tổng tiền, trạng thái đơn hàng
+
+Cho phép cập nhật trạng thái đơn, PENDING / PAID
+
+📦 Quản lý tồn kho (Inventory)
+
+Thêm mới, cập nhật số lượng sách còn lại
+
+Cho phép tìm kiếm theo mã sách hoặc tên
+
+Cảnh báo tồn kho theo số lượng
+
+Thông báo Warning theo status LOW_STOCK/OVER_STOCK/IN_STOCK/OUT_OF_STOCK
+
+⚙️ Cài đặt & chạy dự án
+
+# Cài đặt package
+
+npm install
+
+# Tạo file .env từ mẫu
+
+cp .env.example .env
+
+# Chạy ứng dụng ở dev mode
+
+npm run dev
+
+🎉 Ghi chú:
+
+Tất cả lỗi và cảnh báo đều chuẩn hóa qua middleware ErrorHandler
+
+Logger sử dụng Winston ghi lại toàn bộ lỗi quan trọng
+
+Mã nguồn đã tách riêng Controller-Service-Repository theo chuẩn Clean Architecture
+
+Tự động validate request thông qua class-validator
+
+Mỗi entity đều có enum STATUS: ACTIVE, INACTIVE, DELETED để hỗ trợ soft delete
