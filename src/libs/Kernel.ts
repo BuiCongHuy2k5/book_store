@@ -7,6 +7,7 @@ import MongodbProvider from '@Providers/MongodbProvider';
 import GraphqlProvider from '@Providers/GraphqlProvider';
 import SocketProvider from '@Providers/SocketProvider';
 import TypeORMProvider from '@Providers/TypeORMProvider';
+import { ExpressAppProvider } from '@Providers/ExpressAppProvider';
 
 export class Kernel {
   //provider register
@@ -15,6 +16,7 @@ export class Kernel {
     CacheProvider,
     TypeORMProvider,
     HttpProvider,
+    ExpressAppProvider,
     // GraphqlProvider,
     // MongodbProvider,
     // SocketProvider,

@@ -24,18 +24,20 @@ class MainApplication {
 
       let providers = Kernel.providers;
 
-      // register all providers
+      // Đăng ký tất cả provider
       for (let provider of providers) {
+        this.logger.info(`Registering provider: ${provider.name}`);
         await Container.get(provider).register();
       }
 
-      // boot all providers
+      // Khởi động tất cả provider
       for (let provider of providers) {
+        this.logger.info(`Booting provider: ${provider.name}`);
         await Container.get(provider).boot();
       }
 
-      // xử lý signal
-      process.on('uncaughtException', err => {
+      // Xử lý signal
+      process.on('uncaughtException', (err) => {
         this.logger.error('Uncaught Exception thrown', err);
       });
 
@@ -57,16 +59,22 @@ class MainApplication {
       });
 
       // ✅ Start server sau khi boot provider
-      const PORT = Number(process.env.PORT) || 3000;
-      const HOST = "0.0.0.0";
+      const PORT = Number(process.env.PORT) || 3000; // Mặc định 3000 cho cục bộ
+      const HOST = '0.0.0.0';
 
-      // chỗ này bạn cần dùng provider nào đã tạo ra app (ví dụ ExpressAppProvider)
-      const app = Container.get<Application>("expressApp"); // giả sử bạn đã bind app vào Container
+      if (!process.env.PORT) {
+        this.logger.warn('PORT environment variable is not defined, using default port 3000');
+      }
+
+      // Debug: Kiểm tra xem expressApp có được đăng ký không
+      this.logger.info(`Is expressApp registered? ${Container.has('expressApp')}`);
+
+      // Lấy expressApp từ container
+      const app = Container.get<Application>('expressApp');
 
       app.listen(PORT, HOST, () => {
         this.logger.info(`🚀 Server is running on http://${HOST}:${PORT}`);
       });
-
     } catch (err) {
       this.logger.error('Error occurs during bootstrap: ', err);
       appEvent.emit('shutdown');
