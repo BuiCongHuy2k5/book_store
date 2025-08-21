@@ -50,6 +50,10 @@ export default class TypeORMProvider extends ServiceProvider {
       entities: [Category, Book, Author, Customer, Employee, Invoice, Cart, Publisher, Inventory, Account],
 
       cache: true,
+
+      ssl: {
+        rejectUnauthorized: false,
+      },
     };
 
     this.dataSource = new DataSource(options);
