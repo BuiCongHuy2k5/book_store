@@ -5,7 +5,7 @@ WORKDIR /app
 
 # Copy package files trước để cache cài dependencies
 COPY package.json yarn.lock ./
-RUN yarn install
+RUN yarn install --frozen-lockfile
 
 # Copy toàn bộ source code
 COPY . .
@@ -21,10 +21,11 @@ WORKDIR /app
 # Copy từ stage builder
 COPY --from=builder /app/dist ./dist
 COPY package.json yarn.lock ./
-RUN yarn install --production
 
-# Expose port
+RUN yarn install --production --frozen-lockfile
+
+# Render sẽ inject PORT
 EXPOSE 3000
 
-# Run app
-CMD ["yarn", "dev"]
+# Chạy app (production)
+CMD ["node", "dist/index.js"]

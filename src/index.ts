@@ -60,7 +60,6 @@ class MainApplication {
 
       // ✅ Start server sau khi boot provider
       const PORT = Number(process.env.PORT) || 3000; // Mặc định 3000 cho cục bộ
-      const HOST = '0.0.0.0';
 
       if (!process.env.PORT) {
         this.logger.warn('PORT environment variable is not defined, using default port 3000');
@@ -72,8 +71,8 @@ class MainApplication {
       // Lấy expressApp từ container
       const app = Container.get<Application>('expressApp');
 
-      app.listen(PORT, HOST, () => {
-        this.logger.info(`🚀 Server is running on http://${HOST}:${PORT}`);
+      app.listen(PORT, () => {
+        this.logger.info(`🚀 Server is running on ${PORT}`);
       });
     } catch (err) {
       this.logger.error('Error occurs during bootstrap: ', err);
