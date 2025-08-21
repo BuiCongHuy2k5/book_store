@@ -41,7 +41,7 @@ export default class TypeORMProvider extends ServiceProvider {
       username: String(env.db.username),
       password: String(env.db.password),
       database: String(env.db.database),
-      synchronize: (env.db.synchronize = true), // ✅ KHÔNG được gán lại biến môi trường
+      synchronize: env.db.synchronize === true, // ✅ KHÔNG được gán lại biến môi trường
       logging: loggingOptions,
       logger: new TypeORMLogger(loggingOptions),
       migrations: env.db.migrations || [],
