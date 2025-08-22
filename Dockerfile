@@ -28,4 +28,9 @@ RUN yarn install --production --frozen-lockfile
 EXPOSE 3000
 
 # Chạy app (production)
-CMD ["node", "dist/index.js"]
+# CMD ["node", "dist/index.js"]
+# Entry point script
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
+
+CMD ["/start.sh"]
